@@ -11,16 +11,17 @@
 
 #include "basic_object3d.h"
 #include "modelview.h"
-
+//COMENTARIO
 class _object3D:public _basic_object3D
 {
 public:
    vector<_vertex3ui> Triangles;
+   vector<_vertex3ui>  normalesVertices;
 
    void draw(ModelView model);
    void draw_line();
    void draw_fill();
-   void draw_chess() ;
+   void draw_chess();
 
 };
 
