@@ -1,0 +1,14 @@
+-He creado los objetos de revolución, creando también subobjetos que pueden ser sacados con:
+	3-cono
+	4-cilindro
+	5-esfera
+
+-También he programado un objeto de extrusión, el cual recibe un perfil base y sobre él le aplica un vector. Por defecto he generado un pentagono extruido con el vector (1,1,1), que puede ser visto con la tecla 7
+
+-El objeto PLY se genera con el 6, y te pedirá en la terminal la ubicación del archivo PLY a cargar. He incluido una carpeta con modelos ply.
+
+-En el objeto de revolución, para no repetir vertices he creado una vector llamado VerticesSinRepetir, el cual guarda enteros sin signo que apuntan al verdadero vector de Vertices que se ha generado sin repetir estos vertices. De forma que el vector VerticesSinRepetir tendra perfil.size()*revoluciones vertices, y tendrá enteros apuntando a posiciones del vector Vertices. Por ejemplo, si el vertice 3 del perfil tiene x=0, en el VerticesSinRepetir cada elemento 3+perfil.size()*i para i<revoluciones será igual a 3. El resto los revolucionará sin problema.
+
+-En los objetos de revolucion, el perfil puede ser introducido tanto ascendentemente como descendentemente.
+
+

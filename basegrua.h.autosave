@@ -1,0 +1,12 @@
+#ifndef BASEGRUA_H
+#define BASEGRUA_H
+
+
+class BaseGrua
+{
+public:
+    BaseGrua();
+    void draw();
+};
+
+#endif // BASEGRUA_H
