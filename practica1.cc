@@ -114,6 +114,8 @@ bool Draw_point=false;
 bool Draw_line=true;
 bool Draw_fill=false;
 bool Draw_chess=false;
+bool Draw_flat= false;
+bool Draw_smooth= false;
 
 _object Object=OBJECT_TETRAHEDRON;
 
@@ -246,6 +248,21 @@ void draw_objects()
 	 default:break;
       }
    }
+
+   if (Draw_flat){
+      switch (Object){
+     case OBJECT_TETRAHEDRON:Tetrahedron.draw_flat();break;
+     case OBJECT_CUBE:Cube.draw_flat();break;
+     case OBJECT_PLY:ply.draw_flat();break;
+     case OBJECT_REV:revolucionado.draw_flat(); break;
+     case OBJECT_CONE:cone.draw_flat(); break;
+     case OBJECT_CYLINDER:cylinder.draw_flat(); break;
+     case OBJECT_SPHERE:sphere.draw_flat(); break;
+     case OBJECT_EXTRUSION:extrusion.draw_flat(); break;
+     case OBJECT_GRUA:Grua.draw(chess); break;
+     default:break;
+      }
+   }
 }
 
 
@@ -290,7 +307,7 @@ void resize(int Ancho1,int Alto1)
 
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
-    string nombre;
+   string nombre;
    switch (toupper(Tecla1)){
       case '1':Object=OBJECT_TETRAHEDRON;break;
       case '2':Object=OBJECT_CUBE;break;
@@ -308,6 +325,8 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case 'L':Draw_line=!Draw_line;break;
       case 'F':Draw_fill=!Draw_fill;break;
       case 'C':Draw_chess=!Draw_chess;break;
+      case 'Z':Draw_flat= !Draw_flat; break;
+
       case 'T':Grua.moverGancho(0.05);break;
       case 'G':Grua.moverGancho(-0.05);break;
       case 'Y':Grua.girarEje1(5);break;

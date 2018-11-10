@@ -69,6 +69,44 @@ void _object3D::draw_chess()
 }
 
 
+void _object3D::draw_flat(){
+
+    if(normalesCaras.size()==0){
+        this->crearNormalesCaras();
+    }
+
+    glEnable(GL_LIGHTING);
+    glShadeModel(GL_FLAT);
+
+    glBegin(GL_TRIANGLES);
+    for (unsigned int i=0;i<Triangles.size();i++){
+       glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+    }
+}
+
+void _object3D::draw_smooth(){
+
+    if(normalesVertices.size()==0){
+        this->crearNormalesCaras();
+    }
+
+    glEnable(GL_LIGHTING);
+    glShadeModel(GL_SMOOTH);
+
+    glBegin(GL_TRIANGLES);
+    for (unsigned int i=0;i<Triangles.size();i++){
+       glNormal3f(normalesVertices[Triangles[i]._0].x, normalesVertices[Triangles[i]._0].y, normalesVertices[Triangles[i]._0].z);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+       glNormal3f(normalesVertices[Triangles[i]._1].x, normalesVertices[Triangles[i]._1].y, normalesVertices[Triangles[i]._1].z);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+       glNormal3f(normalesVertices[Triangles[i]._2].x, normalesVertices[Triangles[i]._2].y, normalesVertices[Triangles[i]._2].z);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+    }
+}
+
 void _object3D::draw(ModelView model){
     switch(model){
         case points: this->draw_point();break;

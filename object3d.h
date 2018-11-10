@@ -16,12 +16,18 @@ class _object3D:public _basic_object3D
 {
 public:
    vector<_vertex3ui> Triangles;
-   vector<_vertex3ui>  normalesVertices;
+   vector<_vertex3f>  normalesVertices;
+   vector<_vertex3f>  normalesCaras;
 
    void draw(ModelView model);
    void draw_line();
    void draw_fill();
    void draw_chess();
+   void draw_flat();
+   void draw_smooth();
+
+   void crearNormalesCaras();
+   void crearNormalesVertices();
 
 };
 
