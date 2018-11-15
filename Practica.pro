@@ -27,7 +27,8 @@ SOURCES += \
     extrusion.cpp \
     mesh.cpp \
     transformation.cpp \
-    grua.cpp
+    grua.cpp \
+    light.cpp
 
 HEADERS +=\
     axis.h \
@@ -48,7 +49,9 @@ HEADERS +=\
     modelview.h \
     transtype.h \
     transformation.h \
-    grua.h
+    grua.h \
+    light.h \
+    lighttype.h
 
 unix {
     target.path = /usr/lib

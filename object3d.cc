@@ -75,7 +75,9 @@ void _object3D::draw_flat(){
         this->crearNormalesCaras();
     }
 
+    glPolygonMode(GL_FRONT,GL_FILL);
     glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
     glShadeModel(GL_FLAT);
 
     glBegin(GL_TRIANGLES);
@@ -85,15 +87,21 @@ void _object3D::draw_flat(){
        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
     }
+    glEnd();
+
+    glDisable(GL_LIGHTING);
+    glDisable(GL_NORMALIZE);
 }
 
 void _object3D::draw_smooth(){
 
     if(normalesVertices.size()==0){
-        this->crearNormalesCaras();
+        this->crearNormalesVertices();
     }
 
+    glPolygonMode(GL_FRONT,GL_FILL);
     glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
 
     glBegin(GL_TRIANGLES);
@@ -105,6 +113,10 @@ void _object3D::draw_smooth(){
        glNormal3f(normalesVertices[Triangles[i]._2].x, normalesVertices[Triangles[i]._2].y, normalesVertices[Triangles[i]._2].z);
        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
     }
+    glEnd();
+
+    glDisable(GL_LIGHTING);
+    glDisable(GL_NORMALIZE);
 }
 
 void _object3D::draw(ModelView model){

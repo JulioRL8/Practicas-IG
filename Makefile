@@ -49,7 +49,7 @@ default : $(TARGETS)
 
 # regla de dependencias
 #
-$(TARGETS) : basic_object3d.o object3d.o axis.o tetrahedron.o practica1.o cube.o PLY.o revolucion.o file_ply_stl.o cilindro.o cono.o esfera.o extrusion.o transformation.o mesh.o grua.o #watt.o
+$(TARGETS) : basic_object3d.o object3d.o axis.o tetrahedron.o practica1.o cube.o PLY.o revolucion.o file_ply_stl.o cilindro.o cono.o esfera.o extrusion.o transformation.o mesh.o grua.o light.o
 
 practica1.o: practica1.cc
 
@@ -82,6 +82,8 @@ transformation.o: transformation.cpp transformation.h
 mesh.o: mesh.cpp mesh.h
 
 grua.o: grua.cpp grua.h
+
+light.o: light.cpp light.h
 
 #watt.o: watt.cpp watt.h
 

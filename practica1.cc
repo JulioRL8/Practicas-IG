@@ -24,6 +24,7 @@
 #include "extrusion.h"
 #include "grua.h"
 #include "modelview.h"
+#include "light.h"
 
 using namespace _colors_ne;
 using namespace std;
@@ -109,6 +110,7 @@ _cono cone(1);
 _revolucion revolucionado= revSimple();
 _esfera sphere(0.5);
 _extrusion extrusion= cuadrado();
+_light luz(GL_LIGHT0, Directional, _vertex4f(4,4,4,1));
 
 bool Draw_point=false;
 bool Draw_line=true;
