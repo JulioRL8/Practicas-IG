@@ -110,6 +110,8 @@ _cono cone(1);
 _revolucion revolucionado= revSimple();
 _esfera sphere(0.5);
 _extrusion extrusion= cuadrado();
+
+//Definicion de luces
 _light luz(GL_LIGHT0, Directional, _vertex4f(4,4,4,1));
 
 bool Draw_point=false;
@@ -123,6 +125,18 @@ _object Object=OBJECT_TETRAHEDRON;
 
 /***********************************************************************************************/
 
+
+/**
+ *
+ *
+ *@param
+ *@returns
+ */
+
+void set_lights()
+{
+    if(luz.isOn()) luz.on();
+}
 
 /**
  * Limpiar ventana
@@ -165,6 +179,7 @@ void change_projection()
 
 void change_observer()
 {
+   set_lights();
    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();

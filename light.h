@@ -23,6 +23,7 @@ public:
     void on();
     void off();
     void Switch();
+    bool isOn();
 
 };
 
