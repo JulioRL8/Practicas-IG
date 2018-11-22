@@ -8,6 +8,7 @@
 class _light
 {
 private:
+    bool ON=false;
     GLenum id;
     lightType type;
     GLfloat *light_specular;
@@ -20,7 +21,8 @@ public:
     _light(GLenum id, lightType type, _vertex4f position=_vertex4f(1,1,1,1),_vertex4f ambient=_vertex4f(1,1,1,1),
            _vertex4f difuse=_vertex4f(1,1,1,1), _vertex4f specular=_vertex4f(1,1,1,1));
     void on();
-    void of();
+    void off();
+    void Switch();
 
 };
 

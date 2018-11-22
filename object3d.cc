@@ -80,6 +80,14 @@ void _object3D::draw_flat(){
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_FLAT);
 
+    /*GLfloat light_diffuse[] = {1.0, 0.0, 0.0, 1.0};  /* Red diffuse light. 
+    GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. 
+
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    glEnable(GL_LIGHT0);*/
+
     glBegin(GL_TRIANGLES);
     for (unsigned int i=0;i<Triangles.size();i++){
        glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
@@ -88,6 +96,8 @@ void _object3D::draw_flat(){
        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
     }
     glEnd();
+
+
 
     glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
@@ -125,6 +135,8 @@ void _object3D::draw(ModelView model){
         case lines: this->draw_line();break;
         case FILL: this->draw_fill();break;
         case chess: this->draw_chess();break;
+        case flat: this->draw_flat();break;
+        case smooth: this->draw_smooth();break;
     }
 }
 

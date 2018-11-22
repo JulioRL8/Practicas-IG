@@ -5,7 +5,9 @@ enum ModelView{
     FILL,
     points,
     lines,
-    chess
+    chess,
+    flat,
+    smooth
 };
 
 #endif // MODELVIEW_H

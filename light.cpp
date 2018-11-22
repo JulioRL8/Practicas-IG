@@ -15,14 +15,18 @@ _light::_light(GLenum id, lightType type, _vertex4f position,_vertex4f ambient, 
     light_specular= pegar(light_specular, specular);
     light_difuse = pegar(light_difuse, difuse);
     light_position= pegar(light_position, position);
-
-
+    
+    /*light_difuse = pegar(light_difuse, {1.0, 0.0, 0.0, 1.0});
+    light_position= pegar(light_position, {1.0, 1.0, 1.0, 0.0});
+    /*
     glLightfv(id,GL_AMBIENT, light_ambient);
     glLightfv(id,GL_DIFFUSE, light_difuse);
     glLightfv(id, GL_SPECULAR, light_specular);
     glLightfv(id, GL_POSITION, light_position);
 
-    glEnable(id);
+    glEnable(id);*/
+
+    this->off();
 
 }
 
@@ -35,8 +39,13 @@ void _light::on(){
     glEnable(id);
 }
 
-void _light::of(){
+void _light::off(){
     glDisable(id);
+}
+
+void _light::Switch(){
+    if(ON){ this->off(); ON=false;}
+    else{ this->on(); ON= true;}
 }
 
 GLfloat* _light::pegar(GLfloat* destino, _vertex4f origen){

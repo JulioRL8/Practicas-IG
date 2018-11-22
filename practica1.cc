@@ -261,7 +261,22 @@ void draw_objects()
      case OBJECT_CYLINDER:cylinder.draw_flat(); break;
      case OBJECT_SPHERE:sphere.draw_flat(); break;
      case OBJECT_EXTRUSION:extrusion.draw_flat(); break;
-     case OBJECT_GRUA:Grua.draw(chess); break;
+     case OBJECT_GRUA:Grua.draw(flat); break;
+     default:break;
+      }
+   }
+
+    if (Draw_smooth){
+      switch (Object){
+     case OBJECT_TETRAHEDRON:Tetrahedron.draw_smooth();break;
+     case OBJECT_CUBE:Cube.draw_smooth();break;
+     case OBJECT_PLY:ply.draw_smooth();break;
+     case OBJECT_REV:revolucionado.draw_smooth(); break;
+     case OBJECT_CONE:cone.draw_smooth(); break;
+     case OBJECT_CYLINDER:cylinder.draw_smooth(); break;
+     case OBJECT_SPHERE:sphere.draw_smooth(); break;
+     case OBJECT_EXTRUSION:extrusion.draw_smooth(); break;
+     case OBJECT_GRUA:Grua.draw(smooth); break;
      default:break;
       }
    }
@@ -318,7 +333,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case '5':Object=OBJECT_SPHERE;break;
       case '6':Object=OBJECT_PLY;
 
-            cout << "Introduzca el archivo PLY: "; cin >> nombre; ply= _PLY(nombre); break;
+            /*cout << "Introduzca el archivo PLY: "; cin >> nombre; ply= _PLY(nombre); break;*/
       case '7':Object=OBJECT_EXTRUSION; break;
       case '8':Object=OBJECT_REV; break;
       case '9':Object=OBJECT_GRUA; break;
@@ -328,6 +343,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case 'F':Draw_fill=!Draw_fill;break;
       case 'C':Draw_chess=!Draw_chess;break;
       case 'Z':Draw_flat= !Draw_flat; break;
+      case 'X':Draw_smooth= !Draw_smooth; break;
 
       case 'T':Grua.moverGancho(0.05);break;
       case 'G':Grua.moverGancho(-0.05);break;
@@ -363,6 +379,7 @@ void special_keys(int Tecla1,int x,int y)
       case GLUT_KEY_DOWN:Observer_angle_x++;break;
       case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
       case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+      case GLUT_KEY_F1: luz.Switch(); break;
    }
    glutPostRedisplay();
 }
