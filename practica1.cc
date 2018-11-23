@@ -41,6 +41,8 @@ const float ANGLE_STEP=1;
 typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
 typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE, OBJECT_PLY, OBJECT_REV, OBJECT_CYLINDER, OBJECT_CONE, OBJECT_SPHERE, OBJECT_EXTRUSION, OBJECT_GRUA} _object;
 
+typedef enum {MODE_RENDERING_SOLID,MODE_RENDERING_SOLID_CHESS, MODE_RENDERING_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING, MODE_RENDERING_TEXTURE, MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING} _mode_rendering;
+
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_angle_x=0;
 GLfloat Observer_angle_y=0;
@@ -112,7 +114,11 @@ _esfera sphere(0.5);
 _extrusion extrusion= cuadrado();
 
 //Definicion de luces
-_light luz(GL_LIGHT0, Directional, _vertex4f(4,4,4,1));
+vector<_light> luces= {_light(GL_LIGHT1, Directional, _vertex4f(0,0,1,0)), _light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1), _vertex4f(255,0,255,1), _vertex4f(255,0,255,1)) };
+
+/*luces.add(_light(GL_LIGHT1, Directional, _vertex4f(0,0,1,0)));
+luces.add(_light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1)));*/
+
 
 bool Draw_point=false;
 bool Draw_line=true;
@@ -122,6 +128,7 @@ bool Draw_flat= false;
 bool Draw_smooth= false;
 
 _object Object=OBJECT_TETRAHEDRON;
+_mode_rendering Mode_rendering=MODE_RENDERING_SOLID;
 
 /***********************************************************************************************/
 
@@ -135,7 +142,36 @@ _object Object=OBJECT_TETRAHEDRON;
 
 void set_lights()
 {
-    if(luz.isOn()) luz.on();
+    if(luces[0].isOn()) luces[0].on();
+    if(luces[1].isOn()) luces[1].on();
+}
+
+/**
+ *
+ *@param
+ *@returns
+ */
+
+void set_materials()
+{
+   switch (0){
+      case 0:{
+	 _vertex3f Material_diffuse(0.3,0.3,0.3);
+	 _vertex3f Material_specular(0.1,0.1,0.1);
+	 _vertex3f Material_ambient(0.05,0.05,0.05);
+	 float Material_shininess=1;
+
+	 glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *)&Material_diffuse);
+	 glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *)&Material_specular);
+	 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat *)&Material_ambient);
+	 glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,Material_shininess);
+      }
+	 break;
+      case 1: // segundo material
+	 break;
+      case 2: // tercer material
+	 break;
+   }
 }
 
 /**
@@ -234,22 +270,6 @@ void draw_objects()
       }
    }
 
-   if (Draw_fill){
-      glColor3fv((GLfloat *) &BLUE);
-      switch (Object){
-	 case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
-	 case OBJECT_CUBE:Cube.draw_fill();break;
-	 case OBJECT_PLY:ply.draw_fill();break;
-     case OBJECT_REV:revolucionado.draw_fill(); break;
-     case OBJECT_CONE:cone.draw_fill(); break;
-     case OBJECT_CYLINDER:cylinder.draw_fill(); break;
-     case OBJECT_SPHERE:sphere.draw_fill(); break;
-     case OBJECT_EXTRUSION:extrusion.draw_fill(); break;
-     case OBJECT_GRUA:Grua.draw(FILL); break;
-	 default:break;
-
-      }
-   }
 
    if (Draw_chess){
       switch (Object){
@@ -266,7 +286,91 @@ void draw_objects()
       }
    }
 
-   if (Draw_flat){
+    if (Draw_fill){
+
+        switch(Mode_rendering){
+
+            case MODE_RENDERING_SOLID:
+
+                    glColor3fv((GLfloat *) &BLUE);
+                    glEnable(GL_LIGHTING);
+                      switch (Object){
+	                 case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
+	                 case OBJECT_CUBE:Cube.draw_fill();break;
+	                 case OBJECT_PLY:ply.draw_fill();break;
+                     case OBJECT_REV:revolucionado.draw_fill(); break;
+                     case OBJECT_CONE:cone.draw_fill(); break;
+                     case OBJECT_CYLINDER:cylinder.draw_fill(); break;
+                     case OBJECT_SPHERE:sphere.draw_fill(); break;
+                     case OBJECT_EXTRUSION:extrusion.draw_fill(); break;
+                     case OBJECT_GRUA:Grua.draw(FILL); break;
+	                 default:break;
+                    }
+                    glDisable(GL_LIGHTING);
+            break;
+
+            case MODE_RENDERING_SOLID_CHESS:
+
+                glEnable(GL_LIGHTING);
+
+                switch (Object){
+	             case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
+	             case OBJECT_CUBE:Cube.draw_chess();break;
+	             case OBJECT_PLY:ply.draw_chess();break;
+                 case OBJECT_REV:revolucionado.draw_chess(); break;
+                 case OBJECT_CONE:cone.draw_chess(); break;
+                 case OBJECT_CYLINDER:cylinder.draw_chess(); break;
+                 case OBJECT_SPHERE:sphere.draw_chess(); break;
+                 case OBJECT_EXTRUSION:extrusion.draw_chess(); break;
+                 case OBJECT_GRUA:Grua.draw(chess); break;
+	             default:break;
+                  }
+                 glDisable(GL_LIGHTING);
+
+            break;
+        
+            case MODE_RENDERING_ILLUMINATION_FLAT_SHADING:
+                    set_materials();
+
+                      switch (Object){
+                     case OBJECT_TETRAHEDRON:Tetrahedron.draw_flat();break;
+                     case OBJECT_CUBE:Cube.draw_flat();break;
+                     case OBJECT_PLY:ply.draw_flat();break;
+                     case OBJECT_REV:revolucionado.draw_flat(); break;
+                     case OBJECT_CONE:cone.draw_flat(); break;
+                     case OBJECT_CYLINDER:cylinder.draw_flat(); break;
+                     case OBJECT_SPHERE:sphere.draw_flat(); break;
+                     case OBJECT_EXTRUSION:extrusion.draw_flat(); break;
+                     case OBJECT_GRUA:Grua.draw(flat); break;
+                     default:break;
+                     }
+            break;
+
+            case MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING:
+                    set_materials();
+        
+                      switch (Object){
+                     case OBJECT_TETRAHEDRON:Tetrahedron.draw_smooth();break;
+                     case OBJECT_CUBE:Cube.draw_smooth();break;
+                     case OBJECT_PLY:ply.draw_smooth();break;
+                     case OBJECT_REV:revolucionado.draw_smooth(); break;
+                     case OBJECT_CONE:cone.draw_smooth(); break;
+                     case OBJECT_CYLINDER:cylinder.draw_smooth(); break;
+                     case OBJECT_SPHERE:sphere.draw_smooth(); break;
+                     case OBJECT_EXTRUSION:extrusion.draw_smooth(); break;
+                     case OBJECT_GRUA:Grua.draw(smooth); break;
+                     default:break;
+                     }
+            break;
+      }
+
+    
+   }
+
+   /*if (Draw_flat){
+
+        set_materials();
+
       switch (Object){
      case OBJECT_TETRAHEDRON:Tetrahedron.draw_flat();break;
      case OBJECT_CUBE:Cube.draw_flat();break;
@@ -282,6 +386,9 @@ void draw_objects()
    }
 
     if (Draw_smooth){
+
+        set_materials();
+        
       switch (Object){
      case OBJECT_TETRAHEDRON:Tetrahedron.draw_smooth();break;
      case OBJECT_CUBE:Cube.draw_smooth();break;
@@ -294,7 +401,7 @@ void draw_objects()
      case OBJECT_GRUA:Grua.draw(smooth); break;
      default:break;
       }
-   }
+   }*/
 }
 
 
@@ -347,27 +454,33 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case '4':Object=OBJECT_CYLINDER;break;
       case '5':Object=OBJECT_SPHERE;break;
       case '6':Object=OBJECT_PLY;
+      case '7':Object=OBJECT_GRUA; break;
+
 
             /*cout << "Introduzca el archivo PLY: "; cin >> nombre; ply= _PLY(nombre); break;*/
-      case '7':Object=OBJECT_EXTRUSION; break;
-      case '8':Object=OBJECT_REV; break;
-      case '9':Object=OBJECT_GRUA; break;
-
+      //case '7':Object=OBJECT_EXTRUSION; break;
+      
+      //case '9':Object=OBJECT_GRUA; break;
+    
       case 'P':Draw_point=!Draw_point;break;
       case 'L':Draw_line=!Draw_line;break;
-      case 'F':Draw_fill=!Draw_fill;break;
+      //case 'F':Draw_fill=!Draw_fill;break;
       case 'C':Draw_chess=!Draw_chess;break;
-      case 'Z':Draw_flat= !Draw_flat; break;
-      case 'X':Draw_smooth= !Draw_smooth; break;
+      /*case 'Z':Draw_flat= !Draw_flat; break;
+      case 'X':Draw_smooth= !Draw_smooth; break;*/
+
+      case 'J': luces[0].on();
+      case 'K': luces[1].on();
+      
 
       case 'T':Grua.moverGancho(0.05);break;
       case 'G':Grua.moverGancho(-0.05);break;
       case 'Y':Grua.girarEje1(5);break;
       case 'H':Grua.girarEje1(-5);break;
       case 'U':Grua.girarEje2(5);break;
-      case 'J':Grua.girarEje2(-5);break;
+      //case 'J':Grua.girarEje2(-5);break;
       case 'I':Grua.girarRotatorio(5);break;
-      case 'K':Grua.girarRotatorio(-5);break;
+      //case 'K':Grua.girarRotatorio(-5);break;
 
 
       case 'Q':exit(0);
@@ -394,7 +507,12 @@ void special_keys(int Tecla1,int x,int y)
       case GLUT_KEY_DOWN:Observer_angle_x++;break;
       case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
       case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
-      case GLUT_KEY_F1: luz.Switch(); break;
+      case GLUT_KEY_F1: Mode_rendering= MODE_RENDERING_SOLID; break;
+      case GLUT_KEY_F2: Mode_rendering= MODE_RENDERING_SOLID_CHESS; break;
+      case GLUT_KEY_F3: Mode_rendering= MODE_RENDERING_ILLUMINATION_FLAT_SHADING; break;
+      case GLUT_KEY_F4: Mode_rendering= MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING; break;
+
+ 
    }
    glutPostRedisplay();
 }
