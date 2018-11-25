@@ -28,7 +28,8 @@ SOURCES += \
     mesh.cpp \
     transformation.cpp \
     grua.cpp \
-    light.cpp
+    light.cpp \
+    texture.cpp
 
 HEADERS +=\
     axis.h \
@@ -51,7 +52,8 @@ HEADERS +=\
     transformation.h \
     grua.h \
     light.h \
-    lighttype.h
+    lighttype.h \
+    texture.h
 
 unix {
     target.path = /usr/lib
