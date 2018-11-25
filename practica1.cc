@@ -114,7 +114,7 @@ _esfera sphere(0.5);
 _extrusion extrusion= cuadrado();
 
 //Definicion de luces
-vector<_light> luces= {_light(GL_LIGHT1, Directional, _vertex4f(0,0,1,0)), _light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1), _vertex4f(255,0,255,1), _vertex4f(255,0,255,1)) };
+vector<_light> luces= {_light(GL_LIGHT0, Directional, _vertex4f(0,1,0,0)), _light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1), _vertex4f(0.255,0,0.255,1), _vertex4f(0.255,0,0.255,1)) };
 
 /*luces.add(_light(GL_LIGHT1, Directional, _vertex4f(0,0,1,0)));
 luces.add(_light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1)));*/
@@ -129,6 +129,8 @@ bool Draw_smooth= false;
 
 _object Object=OBJECT_TETRAHEDRON;
 _mode_rendering Mode_rendering=MODE_RENDERING_SOLID;
+bool Light0_active= false;
+bool Light1_active= false;
 
 /***********************************************************************************************/
 
@@ -142,9 +144,40 @@ _mode_rendering Mode_rendering=MODE_RENDERING_SOLID;
 
 void set_lights()
 {
-    if(luces[0].isOn()) luces[0].on();
-    if(luces[1].isOn()) luces[1].on();
+    if(luces[0].isOn()){ luces[0].on();}else{ luces[0].off();}
+    if(luces[1].isOn()){ luces[1].on();}else{ luces[1].off();}
 }
+
+/*void set_lights()
+{
+   if (Light0_active){
+      _vertex4f Position(0,0,1,0);
+
+      glEnable(GL_LIGHT0);
+      /*glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glLoadIdentity();
+      glLightfv(GL_LIGHT0,GL_POSITION,(GLfloat *)&Position);
+      //glPopMatrix();
+   }else if(Light1_active){
+
+       glEnable(GL_LIGHT1);
+       GLfloat light_ambient[]= {1,1,1,1};
+       GLfloat light_difuse[]= {255,0,255,0.25};
+       GLfloat light_specular[]= {255,0,255,0.25};
+       GLfloat light_position[]= {100,4,4,1};
+
+       glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+       glLightfv(GL_LIGHT1, GL_DIFFUSE, light_difuse);
+       glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+       glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+   }
+   else{
+      glDisable(GL_LIGHT0);
+      glDisable(GL_LIGHT1);
+   }
+   // poner la segunda luz
+}*/
 
 /**
  *
@@ -291,9 +324,9 @@ void draw_objects()
         switch(Mode_rendering){
 
             case MODE_RENDERING_SOLID:
-
+                    //set_materials();
                     glColor3fv((GLfloat *) &BLUE);
-                    glEnable(GL_LIGHTING);
+                    //glEnable(GL_LIGHTING);
                       switch (Object){
 	                 case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
 	                 case OBJECT_CUBE:Cube.draw_fill();break;
@@ -306,12 +339,12 @@ void draw_objects()
                      case OBJECT_GRUA:Grua.draw(FILL); break;
 	                 default:break;
                     }
-                    glDisable(GL_LIGHTING);
+                    //glDisable(GL_LIGHTING);
             break;
 
             case MODE_RENDERING_SOLID_CHESS:
-
-                glEnable(GL_LIGHTING);
+                //set_materials();
+                //(GL_LIGHTING);
 
                 switch (Object){
 	             case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
@@ -325,7 +358,7 @@ void draw_objects()
                  case OBJECT_GRUA:Grua.draw(chess); break;
 	             default:break;
                   }
-                 glDisable(GL_LIGHTING);
+                 //glDisable(GL_LIGHTING);
 
             break;
         
@@ -464,14 +497,16 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     
       case 'P':Draw_point=!Draw_point;break;
       case 'L':Draw_line=!Draw_line;break;
-      //case 'F':Draw_fill=!Draw_fill;break;
+      case 'F':Draw_fill=!Draw_fill;break;
       case 'C':Draw_chess=!Draw_chess;break;
       /*case 'Z':Draw_flat= !Draw_flat; break;
       case 'X':Draw_smooth= !Draw_smooth; break;*/
 
-      case 'J': luces[0].on();
-      case 'K': luces[1].on();
+      /*case 'J': Light0_active= !Light0_active;//luces[0].Switch();
+      case 'K': Light1_active= !Light1_active;//luces[1].Switch();*/
       
+      case 'J': luces[0].Switch();
+      case 'K': luces[1].Switch();
 
       case 'T':Grua.moverGancho(0.05);break;
       case 'G':Grua.moverGancho(-0.05);break;
