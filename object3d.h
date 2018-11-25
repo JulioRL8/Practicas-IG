@@ -25,6 +25,8 @@ public:
    void draw_chess();
    void draw_flat();
    void draw_smooth();
+   void draw_texIlu();
+   void draw_tex();
 
    void crearNormalesCaras();
    void crearNormalesVertices();

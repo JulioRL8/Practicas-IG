@@ -77,16 +77,8 @@ void _object3D::draw_flat(){
 
     glPolygonMode(GL_FRONT,GL_FILL);
     glEnable(GL_LIGHTING);
-    glEnable(GL_NORMALIZE);
     glShadeModel(GL_FLAT);
 
-    /*GLfloat light_diffuse[] = {1.0, 0.0, 0.0, 1.0};  /* Red diffuse light. 
-    GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. 
-
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-    glEnable(GL_LIGHT0);*/
 
     glBegin(GL_TRIANGLES);
     for (unsigned int i=0;i<Triangles.size();i++){
@@ -100,7 +92,6 @@ void _object3D::draw_flat(){
 
 
     glDisable(GL_LIGHTING);
-    glDisable(GL_NORMALIZE);
 }
 
 void _object3D::draw_smooth(){
@@ -111,7 +102,6 @@ void _object3D::draw_smooth(){
 
     glPolygonMode(GL_FRONT,GL_FILL);
     glEnable(GL_LIGHTING);
-    glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
 
     glBegin(GL_TRIANGLES);
@@ -126,8 +116,26 @@ void _object3D::draw_smooth(){
     glEnd();
 
     glDisable(GL_LIGHTING);
-    glDisable(GL_NORMALIZE);
 }
+
+void _object3d::draw_tex(){
+    glPolygonMode(GL_FRONT,GL_FILL);
+    glEnable(GL_LIGHTING);
+    glEnable(TEXTURE_2D);
+
+    glBegin(GL_TRIANGLES);
+    for (unsigned int i=0;i<Triangles.size();i++){
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+    }
+    glEnd();
+    
+    glDisable(TEXTURE_2D);
+
+}
+
+
 
 void _object3D::draw(ModelView model){
     switch(model){
