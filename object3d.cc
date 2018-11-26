@@ -118,10 +118,10 @@ void _object3D::draw_smooth(){
     glDisable(GL_LIGHTING);
 }
 
-void _object3d::draw_tex(){
+void _object3D::draw_tex(){
     glPolygonMode(GL_FRONT,GL_FILL);
     glEnable(GL_LIGHTING);
-    glEnable(TEXTURE_2D);
+    //glEnable(TEXTURE_2D);
 
     glBegin(GL_TRIANGLES);
     for (unsigned int i=0;i<Triangles.size();i++){
@@ -131,7 +131,7 @@ void _object3d::draw_tex(){
     }
     glEnd();
     
-    glDisable(TEXTURE_2D);
+    //glDisable(TEXTURE_2D);
 
 }
 
@@ -180,3 +180,4 @@ void _object3D::crearNormalesVertices(){
     }
 
 }
+
