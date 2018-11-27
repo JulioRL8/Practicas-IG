@@ -61,10 +61,15 @@ void _texture::MagFilter(GLint valor){
 
 void _texture::enable(){
     glEnable(GL_TEXTURE_2D);
+    glActiveTexture(this->tex);
     glBindTexture(GL_TEXTURE_2D, id);
     //glDisable(GL_TEXTURE_2D);
 }
 
 void _texture::disable(){
     glDisable(GL_TEXTURE_2D);
+}
+
+_texture::~_texture(){
+    glDeleteTextures(1, &id);
 }

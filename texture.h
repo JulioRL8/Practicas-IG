@@ -12,7 +12,7 @@ private:
     GLenum tex;
 public:
     _texture(char* archivo, GLenum texture=GL_TEXTURE0);
-    //~_texture();
+    ~_texture();
     void WrapT(GLint valor);
     void WrapS(GLint valor);
     void MagFilter(GLint valor);

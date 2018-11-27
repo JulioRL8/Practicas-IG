@@ -61,7 +61,7 @@ _cube Cube;
 _PLY ply("beethoven.ply");
 _grua Grua;
 
-_texture text("imagen_share.png");
+_texture text((char*) "logo.jpg");
 
 
 
@@ -402,8 +402,10 @@ void draw_objects()
             break;
 
             case MODE_RENDERING_TEXTURE:
+                    text.enable();
                     Cube.crearTexturas(text);
                     Cube.draw_tex();
+            break;
       }
 
     

@@ -124,8 +124,11 @@ void _object3D::draw_tex(){
     if(texturas.size()!=0 && textura!=NULL){
         glBegin(GL_TRIANGLES);
         for (unsigned int i=0;i<Triangles.size();i++){
+           glTexCoord2f(texturas[i][0]._0, texturas[i][0]._1);
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+           glTexCoord2f(texturas[i][1]._0, texturas[i][1]._1);
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+           glTexCoord2f(texturas[i][2]._0, texturas[i][2]._1);
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
         }
         glEnd();
