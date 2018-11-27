@@ -1,9 +1,12 @@
 #include "texture.h"
-#include <string>
+#include <string.h>
+#include <vector>
+#include "CImg/CImg.h"
 
-_texture::_texture(string archivo, GLenum texture)
-{
-    std::vector<unsigned char> data;
+using namespace cimg_library;
+
+_texture::_texture(char* archivo, GLenum texture){
+   std::vector<unsigned char> data;
 
    if(0<= texture < GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS) tex= texture; else tex= GL_TEXTURE0;
 
@@ -11,8 +14,8 @@ _texture::_texture(string archivo, GLenum texture)
    imagen.load(archivo);
 
    // empaquetamos bien los datos
-   for (long y = 0; y < logo.height(); y ++)
-      for (long x = 0; x < logo.width(); x ++)
+   for (long y = 0; y < imagen.height(); y ++)
+      for (long x = 0; x < imagen.width(); x ++)
       {
      unsigned char *r = imagen.data(x, y, 0, 0);
      unsigned char *g = imagen.data(x, y, 0, 1);

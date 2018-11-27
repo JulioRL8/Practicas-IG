@@ -20,7 +20,7 @@ public:
    vector<_vertex3ui> Triangles;
    vector<_vertex3f>  normalesVertices;
    vector<_vertex3f>  normalesCaras;
-   vector<_vertex2f> texturas;
+   vector<vector<_vertex2f> > texturas;
    _texture *textura;
 
    void draw(ModelView model);

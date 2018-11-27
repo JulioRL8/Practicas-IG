@@ -25,6 +25,7 @@
 #include "grua.h"
 #include "modelview.h"
 #include "light.h"
+#include "texture.h"
 
 using namespace _colors_ne;
 using namespace std;
@@ -59,6 +60,10 @@ _tetrahedron Tetrahedron;
 _cube Cube;
 _PLY ply("beethoven.ply");
 _grua Grua;
+
+_texture text("imagen_share.png");
+
+
 
 _extrusion cuadrado(){
     vector<_vertex3f> perfil;
@@ -395,6 +400,10 @@ void draw_objects()
                      default:break;
                      }
             break;
+
+            case MODE_RENDERING_TEXTURE:
+                    Cube.crearTexturas(text);
+                    Cube.draw_tex();
       }
 
     
@@ -546,6 +555,7 @@ void special_keys(int Tecla1,int x,int y)
       case GLUT_KEY_F2: Mode_rendering= MODE_RENDERING_SOLID_CHESS; break;
       case GLUT_KEY_F3: Mode_rendering= MODE_RENDERING_ILLUMINATION_FLAT_SHADING; break;
       case GLUT_KEY_F4: Mode_rendering= MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING; break;
+      case GLUT_KEY_F5: Mode_rendering= MODE_RENDERING_TEXTURE; break;
 
  
    }

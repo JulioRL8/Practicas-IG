@@ -120,18 +120,19 @@ void _object3D::draw_smooth(){
 
 void _object3D::draw_tex(){
     glPolygonMode(GL_FRONT,GL_FILL);
-    glEnable(GL_LIGHTING);
-    //glEnable(TEXTURE_2D);
 
-    glBegin(GL_TRIANGLES);
-    for (unsigned int i=0;i<Triangles.size();i++){
-       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+    if(texturas.size()!=0 && textura!=NULL){
+        glBegin(GL_TRIANGLES);
+        for (unsigned int i=0;i<Triangles.size();i++){
+           glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+           glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+           glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+        }
+        glEnd();
+    }else{
+        this->draw_chess();
     }
-    glEnd();
-    
-    //glDisable(TEXTURE_2D);
+
 
 }
 
