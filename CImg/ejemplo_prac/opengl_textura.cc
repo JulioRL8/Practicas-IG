@@ -6,7 +6,9 @@
 
 // ----------------------------------------------------------------------
 // NECESARIO PARA CARGAR LAS IMÁGENES DE DISCO
-#include "CImg.h"
+//#define cimg_use_jpeg
+#include "../CImg.h"
+#include "vector"
 using namespace cimg_library;
 // ----------------------------------------------------------------------
 
@@ -96,7 +98,7 @@ void prepara_textura (void)
    std::vector<unsigned char> data;
 
    CImg<unsigned char> logo;
-   logo.load("./logo.jpg");
+   logo.load("logo.jpg");
 
    // empaquetamos bien los datos
    for (long y = 0; y < logo.height(); y ++)

@@ -65,10 +65,10 @@ _cube::_cube(float Size){
 
 }
 
-void _cube::crearTexturas(_texture textura){
-    this->textura= &textura;
+void _cube::crearTexturas(_texture text){
+    this->textura= &text;
 
-    textura.enable();
+    textura->enable();
     texturas.resize(Triangles.size());
     
     for(int i=0; i<Triangles.size(); i+=2){
