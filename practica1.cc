@@ -41,7 +41,7 @@ const float DEFAULT_DISTANCE=2;
 const float ANGLE_STEP=1;
 
 typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
-typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE, OBJECT_PLY, OBJECT_REV, OBJECT_CYLINDER, OBJECT_CONE, OBJECT_SPHERE, OBJECT_EXTRUSION, OBJECT_GRUA} _object;
+typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE, OBJECT_PLY, OBJECT_REV, OBJECT_CYLINDER, OBJECT_CONE, OBJECT_SPHERE, OBJECT_EXTRUSION, OBJECT_TAB, OBJECT_GRUA} _object;
 
 typedef enum {MODE_RENDERING_SOLID,MODE_RENDERING_SOLID_CHESS, MODE_RENDERING_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING, MODE_RENDERING_TEXTURE, MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING} _mode_rendering;
 
@@ -62,7 +62,8 @@ _cube Cube;
 _PLY ply("beethoven.ply");
 _grua Grua;
 
-_texture text((char*) "logo.jpg");
+_textura* textura1;
+_textura* textura2;
 
 
 
@@ -214,6 +215,12 @@ void set_materials()
    }
 }
 
+
+void set_textures(){
+    if(textura1==NULL) textura1= new _textura("logo.jpg");
+    if(textura2==NULL) textura2= new _textura("foto.jpg");
+}
+
 /**
  * Limpiar ventana
  *
@@ -289,6 +296,7 @@ void draw_objects()
      case OBJECT_SPHERE:sphere.draw_point(); break;
      case OBJECT_EXTRUSION:extrusion.draw_point(); break;
      case OBJECT_GRUA:Grua.draw(points); break;
+     case OBJECT_TAB: tab.draw(points); break;
 	 default:break;
       }
    }
@@ -306,12 +314,13 @@ void draw_objects()
      case OBJECT_SPHERE:sphere.draw_line(); break;
      case OBJECT_EXTRUSION:extrusion.draw_line(); break;
      case OBJECT_GRUA:Grua.draw(lines); break;
+     case OBJECT_TAB: tab.draw(lines); break;
 	 default:break;
       }
    }
 
 
-   if (Draw_chess){
+   /*if (Draw_chess){
       switch (Object){
 	 case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
 	 case OBJECT_CUBE:Cube.draw_chess();break;
@@ -322,9 +331,10 @@ void draw_objects()
      case OBJECT_SPHERE:sphere.draw_chess(); break;
      case OBJECT_EXTRUSION:extrusion.draw_chess(); break;
      case OBJECT_GRUA:Grua.draw(chess); break;
+
 	 default:break;
       }
-   }
+   }*/
 
     if (Draw_fill){
 
@@ -344,6 +354,7 @@ void draw_objects()
                      case OBJECT_SPHERE:sphere.draw_fill(); break;
                      case OBJECT_EXTRUSION:extrusion.draw_fill(); break;
                      case OBJECT_GRUA:Grua.draw(FILL); break;
+                     case OBJECT_TAB: tab.draw(FILL); break;
 	                 default:break;
                     }
                     //glDisable(GL_LIGHTING);
@@ -363,6 +374,7 @@ void draw_objects()
                  case OBJECT_SPHERE:sphere.draw_chess(); break;
                  case OBJECT_EXTRUSION:extrusion.draw_chess(); break;
                  case OBJECT_GRUA:Grua.draw(chess); break;
+                 case OBJECT_TAB: tab.draw(chess); break;
 	             default:break;
                   }
                  //glDisable(GL_LIGHTING);
@@ -382,6 +394,7 @@ void draw_objects()
                      case OBJECT_SPHERE:sphere.draw_flat(); break;
                      case OBJECT_EXTRUSION:extrusion.draw_flat(); break;
                      case OBJECT_GRUA:Grua.draw(flat); break;
+                     case OBJECT_TAB: tab.draw(flat); break;
                      default:break;
                      }
             break;
@@ -399,14 +412,25 @@ void draw_objects()
                      case OBJECT_SPHERE:sphere.draw_smooth(); break;
                      case OBJECT_EXTRUSION:extrusion.draw_smooth(); break;
                      case OBJECT_GRUA:Grua.draw(smooth); break;
+                     case OBJECT_TAB: tab.draw(smooth); break;
                      default:break;
                      }
             break;
 
             case MODE_RENDERING_TEXTURE:
-                    text.enable();
-                    tab.crearTexturas(text);
-                    tab.draw_tex();
+                switch (Object){
+               case OBJECT_TETRAHEDRON:Tetrahedron.asignarTextura(textura2); Tetrahedron.draw_tex();break;
+               case OBJECT_CUBE: Cube.asignarTextura(textura1); Cube.draw_tex();break;
+               case OBJECT_PLY:ply.draw_smooth();break;
+               case OBJECT_REV:revolucionado.asignarTextura(textura2); revolucionado.draw_tex(); break;
+               case OBJECT_CONE: cone.asignarTextura(textura2); cone.draw_tex(); break;
+               case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex(); break;
+               case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex(); break;
+               case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex(); break;
+               case OBJECT_GRUA: Grua.asignarTextura(textura2); Grua.draw(smooth); break;
+               case OBJECT_TAB: tab.asignarTextura(textura2); tab.draw_tex();break;
+               default:break;
+               }
             break;
       }
 
@@ -501,6 +525,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case '5':Object=OBJECT_SPHERE;break;
       case '6':Object=OBJECT_PLY;
       case '7':Object=OBJECT_GRUA; break;
+      case '8':Object=OBJECT_TAB; break;
 
 
             /*cout << "Introduzca el archivo PLY: "; cin >> nombre; ply= _PLY(nombre); break;*/
@@ -576,6 +601,8 @@ void initialize(void)
 {
    // se indica cual sera el color para limpiar la ventana	(r,v,a,al)
    glClearColor(1,1,1,1);
+
+   set_textures();
 
    // se habilita el z-bufer
    glEnable(GL_DEPTH_TEST);

@@ -40,30 +40,30 @@ _texture::_texture(char* archivo, GLenum texture){
 }
 
 void _texture::WrapS(GLint valor){
-    glActiveTexture(this->tex);
+    //glActiveTexture(this->tex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, valor);
 }
 
 void _texture::WrapT(GLint valor){
-    glActiveTexture(this->tex);
+    //glActiveTexture(this->tex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, valor);
 }
 
 void _texture::MinFilter(GLint valor){
-    glActiveTexture(this->tex);
+    //glActiveTexture(this->tex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, valor);
 }
 
 void _texture::MagFilter(GLint valor){
-    glActiveTexture(this->tex);
+    //glActiveTexture(this->tex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, valor);
 }
 
 void _texture::enable(){
     glEnable(GL_TEXTURE_2D);
-    glActiveTexture(this->tex);
+    //glActiveTexture(this->tex);
     glBindTexture(GL_TEXTURE_2D, id);
-    //glDisable(GL_TEXTURE_2D);
+
 }
 
 void _texture::disable(){
@@ -71,5 +71,5 @@ void _texture::disable(){
 }
 
 _texture::~_texture(){
-    glDeleteTextures(1, &id);
+    //glDeleteTextures(1, &id);
 }

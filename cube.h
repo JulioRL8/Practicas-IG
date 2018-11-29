@@ -2,13 +2,13 @@
 #define CUBE_H
 
 #include "object3d.h"
-#include "texture.h"
+#include "textura.h"
 
 class _cube:public _object3D
 {
 public:
    _cube(float Size=1.0);
-   void crearTexturas(_texture textura);
+   void crearTexturas() override;
 };
 
 #endif

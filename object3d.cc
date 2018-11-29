@@ -89,8 +89,6 @@ void _object3D::draw_flat(){
     }
     glEnd();
 
-
-
     glDisable(GL_LIGHTING);
 }
 
@@ -119,10 +117,17 @@ void _object3D::draw_smooth(){
 }
 
 void _object3D::draw_tex(){
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
-    if(texturas.size()!=0 && textura!=NULL){
+    if(texturas.empty()){
+       this->crearTexturas();
+    }
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textura->_id);
+    if(textura!=NULL){
         glBegin(GL_TRIANGLES);
+        //glColor4i(1,1,1,1);
         for (unsigned int i=0;i<Triangles.size();i++){
            glTexCoord2f(texturas[i][0]._0, texturas[i][0]._1);
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
@@ -132,10 +137,9 @@ void _object3D::draw_tex(){
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
         }
         glEnd();
-    }else{
-        this->draw_chess();
     }
 
+    glDisable(GL_TEXTURE_2D);
 
 }
 
@@ -183,5 +187,28 @@ void _object3D::crearNormalesVertices(){
         normalesVertices[i]= aux;
     }
 
+}
+
+void _object3D::asignarTextura(_textura *textura){
+    if(this->textura!= textura){
+        this->textura= textura;
+    }
+}
+
+void _object3D::crearTexturas(){
+
+    texturas.resize(Triangles.size());
+
+    for(int i=0; i<Triangles.size(); i+=2){
+        texturas[i].resize(3);
+        texturas[i][0]= _vertex2f(0,1);
+        texturas[i][1]= _vertex2f(1,1);
+        texturas[i][2]= _vertex2f(1,0);
+
+        texturas[i+1].resize(3);
+        texturas[i+1][0]= _vertex2f(0,1);
+        texturas[i+1][1]= _vertex2f(1,0);
+        texturas[i+1][2]= _vertex2f(0,0);
+    }
 }
 

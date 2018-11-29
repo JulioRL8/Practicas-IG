@@ -30,7 +30,8 @@ SOURCES += \
     grua.cpp \
     light.cpp \
     texture.cpp \
-    tablero.cpp
+    tablero.cpp \
+    textura.cc
 
 HEADERS +=\
     axis.h \
@@ -55,7 +56,8 @@ HEADERS +=\
     light.h \
     lighttype.h \
     texture.h \
-    tablero.h
+    tablero.h \
+    textura.h
 
 unix {
     target.path = /usr/lib

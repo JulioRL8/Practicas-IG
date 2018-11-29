@@ -11,7 +11,7 @@
 
 #include "basic_object3d.h"
 #include "modelview.h"
-#include "texture.h"
+#include "textura.h"
 
 //COMENTARIO
 class _object3D:public _basic_object3D
@@ -21,7 +21,7 @@ public:
    vector<_vertex3f>  normalesVertices;
    vector<_vertex3f>  normalesCaras;
    vector<vector<_vertex2f> > texturas;
-   _texture *textura;
+   _textura *textura;
 
    void draw(ModelView model);
    void draw_line();
@@ -34,7 +34,8 @@ public:
 
    void crearNormalesCaras();
    void crearNormalesVertices();
-   void crearTexturas(_texture textura);
+   void asignarTextura(_textura* textura);
+   virtual void crearTexturas();
 
 };
 
