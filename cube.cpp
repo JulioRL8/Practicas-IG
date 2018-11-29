@@ -73,14 +73,14 @@ void _cube::crearTexturas(_texture text){
     
     for(int i=0; i<Triangles.size(); i+=2){
         texturas[i].resize(3);
-        texturas[i][0]= _vertex2f(0,1);
-        texturas[i][1]= _vertex2f(1,1);
-        texturas[i][2]= _vertex2f(1,0);
+        texturas[i][0]= _vertex2f(0,0);
+        texturas[i][1]= _vertex2f(1,0);
+        texturas[i][2]= _vertex2f(1,1);
 
         texturas[i+1].resize(3);
-        texturas[i+1][0]= _vertex2f(0,1);
-        texturas[i+1][1]= _vertex2f(1,0);
-        texturas[i+1][2]= _vertex2f(1,1);
+        texturas[i+1][0]= _vertex2f(0,0);
+        texturas[i+1][1]= _vertex2f(1,1);
+        texturas[i+1][2]= _vertex2f(0,1);
     }
 
 }

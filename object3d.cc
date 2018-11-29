@@ -119,7 +119,7 @@ void _object3D::draw_smooth(){
 }
 
 void _object3D::draw_tex(){
-    glPolygonMode(GL_FRONT,GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
     if(texturas.size()!=0 && textura!=NULL){
         glBegin(GL_TRIANGLES);

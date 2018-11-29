@@ -26,6 +26,7 @@
 #include "modelview.h"
 #include "light.h"
 #include "texture.h"
+#include "tablero.h"
 
 using namespace _colors_ne;
 using namespace std;
@@ -117,6 +118,7 @@ _cono cone(1);
 _revolucion revolucionado= revSimple();
 _esfera sphere(0.5);
 _extrusion extrusion= cuadrado();
+_tablero tab;
 
 //Definicion de luces
 vector<_light> luces= {_light(GL_LIGHT0, Directional, _vertex4f(0,1,0,0)), _light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1), _vertex4f(0.255,0,0.255,1), _vertex4f(0.255,0,0.255,1)) };
@@ -403,8 +405,8 @@ void draw_objects()
 
             case MODE_RENDERING_TEXTURE:
                     text.enable();
-                    Cube.crearTexturas(text);
-                    Cube.draw_tex();
+                    tab.crearTexturas(text);
+                    tab.draw_tex();
             break;
       }
 
