@@ -64,6 +64,8 @@ _grua Grua;
 
 _textura* textura1;
 _textura* textura2;
+_textura* textura3;
+
 
 
 
@@ -197,7 +199,7 @@ void set_materials()
 {
    switch (0){
       case 0:{
-	 _vertex3f Material_diffuse(0.3,0.3,0.3);
+	 /*_vertex3f Material_diffuse(0.3,0.3,0.3);
 	 _vertex3f Material_specular(0.1,0.1,0.1);
 	 _vertex3f Material_ambient(0.05,0.05,0.05);
 	 float Material_shininess=1;
@@ -205,7 +207,7 @@ void set_materials()
 	 glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *)&Material_diffuse);
 	 glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *)&Material_specular);
 	 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat *)&Material_ambient);
-	 glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,Material_shininess);
+	 glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,Material_shininess);*/
       }
 	 break;
       case 1: // segundo material
@@ -218,7 +220,8 @@ void set_materials()
 
 void set_textures(){
     if(textura1==NULL) textura1= new _textura("logo.jpg");
-    if(textura2==NULL) textura2= new _textura("foto.jpg");
+    if(textura2==NULL) textura2= new _textura("imagen_share.png");
+    if(textura2==NULL) textura3= new _textura("dado.png");
 }
 
 /**
@@ -420,7 +423,7 @@ void draw_objects()
             case MODE_RENDERING_TEXTURE:
                 switch (Object){
                case OBJECT_TETRAHEDRON:Tetrahedron.asignarTextura(textura2); Tetrahedron.draw_tex();break;
-               case OBJECT_CUBE: Cube.asignarTextura(textura1); Cube.draw_tex();break;
+               case OBJECT_CUBE: Cube.asignarTextura(textura3, true); Cube.draw_tex();break;
                case OBJECT_PLY:ply.draw_smooth();break;
                case OBJECT_REV:revolucionado.asignarTextura(textura2); revolucionado.draw_tex(); break;
                case OBJECT_CONE: cone.asignarTextura(textura2); cone.draw_tex(); break;
@@ -437,41 +440,7 @@ void draw_objects()
     
    }
 
-   /*if (Draw_flat){
-
-        set_materials();
-
-      switch (Object){
-     case OBJECT_TETRAHEDRON:Tetrahedron.draw_flat();break;
-     case OBJECT_CUBE:Cube.draw_flat();break;
-     case OBJECT_PLY:ply.draw_flat();break;
-     case OBJECT_REV:revolucionado.draw_flat(); break;
-     case OBJECT_CONE:cone.draw_flat(); break;
-     case OBJECT_CYLINDER:cylinder.draw_flat(); break;
-     case OBJECT_SPHERE:sphere.draw_flat(); break;
-     case OBJECT_EXTRUSION:extrusion.draw_flat(); break;
-     case OBJECT_GRUA:Grua.draw(flat); break;
-     default:break;
-      }
-   }
-
-    if (Draw_smooth){
-
-        set_materials();
-        
-      switch (Object){
-     case OBJECT_TETRAHEDRON:Tetrahedron.draw_smooth();break;
-     case OBJECT_CUBE:Cube.draw_smooth();break;
-     case OBJECT_PLY:ply.draw_smooth();break;
-     case OBJECT_REV:revolucionado.draw_smooth(); break;
-     case OBJECT_CONE:cone.draw_smooth(); break;
-     case OBJECT_CYLINDER:cylinder.draw_smooth(); break;
-     case OBJECT_SPHERE:sphere.draw_smooth(); break;
-     case OBJECT_EXTRUSION:extrusion.draw_smooth(); break;
-     case OBJECT_GRUA:Grua.draw(smooth); break;
-     default:break;
-      }
-   }*/
+  
 }
 
 

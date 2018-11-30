@@ -1,5 +1,7 @@
 #include <cube.h>
 
+#include <cmath>
+
 _cube::_cube(float Size){
 
     Vertices.resize(8);
@@ -34,17 +36,60 @@ void _cube::crearTexturas(){
 
     texturas.resize(Triangles.size());
 
-    for(int i=0; i<Triangles.size(); i+=2){
-        texturas[i].resize(3);
-        texturas[i][0]= _vertex2f(0,1);
-        texturas[i][1]= _vertex2f(1,1);
-        texturas[i][2]= _vertex2f(1,0);
+    if(texturaCompleta){
+        int cara=1;
+        float partesx= 1/4;
+        float partesy= 1/3;
+        for(int i=0; i<Triangles.size()-4; i+=2){
+            texturas[i].resize(3);
+            texturas[i][0]= _vertex2f(partesx*cara,partesy*2);
+            texturas[i][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy*2);
+            texturas[i][2]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy);
 
-        texturas[i+1].resize(3);
-        texturas[i+1][0]= _vertex2f(0,1);
-        texturas[i+1][1]= _vertex2f(1,0);
-        texturas[i+1][2]= _vertex2f(0,0);
+            texturas[i+1].resize(3);
+            texturas[i+1][0]= _vertex2f(partesx*cara,partesy*2);
+            texturas[i+1][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy);
+            texturas[i+1][2]= _vertex2f(partesx,partesy);
+            cara= (cara+1)%4;
+        }
+        cara=1;
+        float pos=1;
+        for(int i=Triangles.size()-4; i<Triangles.size(); i+=2){
+            texturas[i].resize(3);
+            texturas[i][0]= _vertex2f(partesx*cara,partesy*pos);
+            texturas[i][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy*pos);
+            texturas[i][2]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy*(pos-1));
+
+            texturas[i+1].resize(3);
+            texturas[i+1][0]= _vertex2f(partesx*cara,partesy*pos);
+            texturas[i+1][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy*(pos-1));
+            texturas[i+1][2]= _vertex2f(partesx,partesy*(pos-1));
+            pos= 3;
+        }
+    }else{
+        for(int i=0; i<Triangles.size(); i+=2){
+            texturas[i].resize(3);
+            texturas[i][0]= _vertex2f(0,1);
+            texturas[i][1]= _vertex2f(1,1);
+            texturas[i][2]= _vertex2f(1,0);
+
+            texturas[i+1].resize(3);
+            texturas[i+1][0]= _vertex2f(0,1);
+            texturas[i+1][1]= _vertex2f(1,0);
+            texturas[i+1][2]= _vertex2f(0,0);
+        }
     }
 
 
 }
+
+void _cube::asignarTextura(_textura* textura, bool completo){
+
+    if(this->textura!= textura){
+        this->textura= textura;
+    }
+    texturaCompleta=completo;
+
+    
+}
+

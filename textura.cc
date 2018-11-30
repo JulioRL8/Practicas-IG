@@ -28,7 +28,7 @@ _textura::_textura(const char* fname)
 
    glGenTextures(1, &this->_id);
    glBindTexture(GL_TEXTURE_2D, this->_id);
-   cout << "Creando: " <<_id << endl;
+
 
    glActiveTexture(GL_TEXTURE0);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -49,7 +49,6 @@ GLuint _textura::id(void)
 
 _textura::~_textura()
 {
-   cout << "Destruyendo: " <<_id << endl;
-   //if (this->_id)
-      //glDeleteTextures(1, &this->_id);
+   if (this->_id)
+      glDeleteTextures(1, &this->_id);
 }

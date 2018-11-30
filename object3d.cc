@@ -124,10 +124,11 @@ void _object3D::draw_tex(){
 
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_ALPHA_TEST);
     glBindTexture(GL_TEXTURE_2D, textura->_id);
     if(textura!=NULL){
         glBegin(GL_TRIANGLES);
-        //glColor4i(1,1,1,1);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         for (unsigned int i=0;i<Triangles.size();i++){
            glTexCoord2f(texturas[i][0]._0, texturas[i][0]._1);
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
@@ -138,7 +139,7 @@ void _object3D::draw_tex(){
         }
         glEnd();
     }
-
+    glDisable(GL_ALPHA_TEST);
     glDisable(GL_TEXTURE_2D);
 
 }

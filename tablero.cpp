@@ -18,7 +18,7 @@ _tablero::_tablero(float tam)
 }
 
 
-void _tablero::draw_tex(){
+/*void _tablero::draw_tex(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
     glEnable(GL_TEXTURE_2D);
@@ -36,4 +36,4 @@ void _tablero::draw_tex(){
         glEnd();
     }
     glDisable(GL_TEXTURE_2D);
-}
+}*/
