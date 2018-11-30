@@ -90,6 +90,5 @@ void _cube::asignarTextura(_textura* textura, bool completo){
     }
     texturaCompleta=completo;
 
-    
 }
 

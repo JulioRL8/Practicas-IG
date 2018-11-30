@@ -6,6 +6,10 @@
 
 QT       -= gui
 
+@CONFIG += debug
+
+QMAKE_LFLAGS += -g@
+
 TARGET = practica2
 TEMPLATE = lib
 
