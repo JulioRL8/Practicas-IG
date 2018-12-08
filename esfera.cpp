@@ -13,7 +13,8 @@ _esfera::_esfera(float radio, int revoluciones)
     for(int i=1; i<=vertices; i++){
         perfil[i]= _vertex3f(perfil[0].y * sin(angulo*i),perfil[0].y * cos(angulo*i),0);
     }
-
+    //this->revoluciones= revoluciones;
     crearMalla(perfil,revoluciones);
 
 }
+

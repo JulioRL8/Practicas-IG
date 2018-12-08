@@ -116,7 +116,7 @@ _revolucion revSimple(){
 }
 
 //Objeto Revolucionado
-_cilindro cylinder(2);
+_cilindro cylinder(1,0.5);
 _cono cone(1);
 _revolucion revolucionado= revSimple();
 _esfera sphere(0.5);
@@ -221,7 +221,7 @@ void set_materials()
 void set_textures(){
     if(textura1==NULL) textura1= new _textura("logo.jpg");
     if(textura2==NULL) textura2= new _textura("imagen_share.png");
-    if(textura2==NULL) textura3= new _textura("dado.png");
+    if(textura3==NULL) textura3= new _textura("dado.png");
 }
 
 /**

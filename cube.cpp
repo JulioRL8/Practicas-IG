@@ -38,18 +38,20 @@ void _cube::crearTexturas(){
 
     if(texturaCompleta){
         int cara=1;
-        float partesx= 1/4;
-        float partesy= 1/3;
+        float partesx= 1.0/4.0;
+        float partesy= 1.0/3.0;
+
         for(int i=0; i<Triangles.size()-4; i+=2){
             texturas[i].resize(3);
-            texturas[i][0]= _vertex2f(partesx*cara,partesy*2);
-            texturas[i][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy*2);
+            texturas[i][0]= _vertex2f(partesx*cara,partesy*2.0);
+            texturas[i][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy*2.0);
             texturas[i][2]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy);
 
             texturas[i+1].resize(3);
             texturas[i+1][0]= _vertex2f(partesx*cara,partesy*2);
             texturas[i+1][1]= _vertex2f(fmod(partesx*(cara+1),4.0f),partesy);
-            texturas[i+1][2]= _vertex2f(partesx,partesy);
+            texturas[i+1][2]= _vertex2f(partesx*cara,partesy);
+
             cara= (cara+1)%4;
         }
         cara=1;

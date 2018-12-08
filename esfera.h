@@ -5,6 +5,8 @@
 
 class _esfera : public _revolucion
 {
+private:
+    int revoluciones;
 public:
     _esfera(float radio=0.5, int revoluciones=26);
 };

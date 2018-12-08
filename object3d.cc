@@ -124,22 +124,29 @@ void _object3D::draw_tex(){
 
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
+    //glEnable(GL_ALPHA_TEST);
     glBindTexture(GL_TEXTURE_2D, textura->_id);
     if(textura!=NULL){
         glBegin(GL_TRIANGLES);
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         for (unsigned int i=0;i<Triangles.size();i++){
            glTexCoord2f(texturas[i][0]._0, texturas[i][0]._1);
+           //cout << texturas[i][0]._0 << " " << texturas[i][0]._1 << endl;
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+           //cout << Vertices[Triangles[i]._0].x << " " << Vertices[Triangles[i]._0].y << " " << Vertices[Triangles[i]._0].z << endl;
            glTexCoord2f(texturas[i][1]._0, texturas[i][1]._1);
+           //cout << texturas[i][1]._0 << " " << texturas[i][2]._1 << endl;
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+           //cout << Vertices[Triangles[i]._1].x << " " << Vertices[Triangles[i]._1].y << " " << Vertices[Triangles[i]._1].z << endl;
            glTexCoord2f(texturas[i][2]._0, texturas[i][2]._1);
+           //cout << texturas[i][2]._0 << " " << texturas[i][2]._1<< endl;
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+           //cout << Vertices[Triangles[i]._2].x << " " << Vertices[Triangles[i]._2].y << " " << Vertices[Triangles[i]._2].z << endl;
+
         }
         glEnd();
     }
-    glDisable(GL_ALPHA_TEST);
+    //glDisable(GL_ALPHA_TEST);
     glDisable(GL_TEXTURE_2D);
 
 }
@@ -197,6 +204,7 @@ void _object3D::asignarTextura(_textura *textura){
 }
 
 void _object3D::crearTexturas(){
+    cout << "o3d\n";
 
     texturas.resize(Triangles.size());
 
