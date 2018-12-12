@@ -219,7 +219,7 @@ void set_materials()
 
 
 void set_textures(){
-    if(textura1==NULL) textura1= new _textura("logo.jpg");
+    if(textura1==NULL) textura1= new _textura("textura.jpg");
     if(textura2==NULL) textura2= new _textura("imagen_share.png");
     if(textura3==NULL) textura3= new _textura("dado.png");
 }
@@ -426,7 +426,7 @@ void draw_objects()
                case OBJECT_CUBE: Cube.asignarTextura(textura3, true); Cube.draw_tex();break;
                case OBJECT_PLY:ply.draw_smooth();break;
                case OBJECT_REV:revolucionado.asignarTextura(textura2); revolucionado.draw_tex(); break;
-               case OBJECT_CONE: cone.asignarTextura(textura2); cone.draw_tex(); break;
+               case OBJECT_CONE: cone.asignarTextura(textura1); cone.draw_tex(); break;
                case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex(); break;
                case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex(); break;
                case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex(); break;
@@ -435,6 +435,38 @@ void draw_objects()
                default:break;
                }
             break;
+
+            case MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING:
+                switch (Object){
+               case OBJECT_TETRAHEDRON:Tetrahedron.asignarTextura(textura2); Tetrahedron.draw_tex_flat();break;
+               case OBJECT_CUBE: Cube.asignarTextura(textura3, true); Cube.draw_tex_flat();break;
+               case OBJECT_PLY:ply.draw_smooth();break;
+               case OBJECT_REV:revolucionado.asignarTextura(textura2); revolucionado.draw_tex_flat(); break;
+               case OBJECT_CONE: cone.asignarTextura(textura1); cone.draw_tex_flat(); break;
+               case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex_flat(); break;
+               case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex_flat(); break;
+               case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex_flat(); break;
+               case OBJECT_GRUA: Grua.asignarTextura(textura2); Grua.draw(smooth); break;
+               case OBJECT_TAB: tab.asignarTextura(textura2); tab.draw_tex_flat();break;
+               default:break;
+               }
+           break;
+
+            case MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING:
+                switch (Object){
+               case OBJECT_TETRAHEDRON:Tetrahedron.asignarTextura(textura2); Tetrahedron.draw_tex_smooth();break;
+               case OBJECT_CUBE: Cube.asignarTextura(textura3, true); Cube.draw_tex_smooth();break;
+               case OBJECT_PLY:ply.draw_smooth();break;
+               case OBJECT_REV:revolucionado.asignarTextura(textura2); revolucionado.draw_tex_smooth(); break;
+               case OBJECT_CONE: cone.asignarTextura(textura1); cone.draw_tex_smooth(); break;
+               case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex_smooth(); break;
+               case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex_smooth(); break;
+               case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex_smooth(); break;
+               case OBJECT_GRUA: Grua.asignarTextura(textura2); Grua.draw(smooth); break;
+               case OBJECT_TAB: tab.asignarTextura(textura2); tab.draw_tex_smooth();break;
+               default:break;
+               }
+           break;
       }
 
     
@@ -554,6 +586,9 @@ void special_keys(int Tecla1,int x,int y)
       case GLUT_KEY_F3: Mode_rendering= MODE_RENDERING_ILLUMINATION_FLAT_SHADING; break;
       case GLUT_KEY_F4: Mode_rendering= MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING; break;
       case GLUT_KEY_F5: Mode_rendering= MODE_RENDERING_TEXTURE; break;
+      case GLUT_KEY_F6: Mode_rendering= MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING; break;
+      case GLUT_KEY_F6: Mode_rendering= MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING; break;
+
 
  
    }

@@ -7,6 +7,7 @@ class _cono : public _revolucion
 {
 public:
     _cono(float altura=1, int revoluciones=26);
+    void crearTexturas();
 };
 
 #endif // _CONO_H
