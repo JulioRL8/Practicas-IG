@@ -125,8 +125,10 @@ void _object3D::draw_tex(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glEnable(GL_TEXTURE_2D);
     //glEnable(GL_ALPHA_TEST);
-    glBindTexture(GL_TEXTURE_2D, textura->_id);
-    if(textura!=NULL){
+
+    if(textura!=NULL && !texturas.empty()){
+
+        glBindTexture(GL_TEXTURE_2D, textura->_id);
         glBegin(GL_TRIANGLES);
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         for (unsigned int i=0;i<Triangles.size();i++){
@@ -212,7 +214,8 @@ void _object3D::draw_tex_flat(){
         glBegin(GL_TRIANGLES);
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         for (unsigned int i=0;i<Triangles.size();i++){
-           glNormal3f(normalesVertices[Triangles[i]._0].x, normalesVertices[Triangles[i]._0].y, normalesVertices[Triangles[i]._0].z);
+
+           glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
            glTexCoord2f(texturas[i][0]._0, texturas[i][0]._1);
            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
            glTexCoord2f(texturas[i][1]._0, texturas[i][1]._1);
@@ -238,6 +241,9 @@ void _object3D::draw(ModelView model){
         case chess: this->draw_chess();break;
         case flat: this->draw_flat();break;
         case smooth: this->draw_smooth();break;
+        case texture: this->draw_tex();break;
+        case texture_smooth: this->draw_tex_smooth();break;
+        case texture_flat: this->draw_tex_flat();break;
     }
 }
 
@@ -296,5 +302,36 @@ void _object3D::crearTexturas(){
         texturas[i+1][1]= _vertex2f(1,0);
         texturas[i+1][2]= _vertex2f(0,0);
     }
+}
+
+void _object3D::draw_normales()
+{
+    if (normalesVertices.empty())
+        crearNormalesVertices();
+        crearNormalesCaras();
+    auto t = 0.1f;
+
+
+
+    glPointSize(1);
+    glBegin(GL_LINES);
+
+    for (auto i = 0u; i < Vertices.size(); ++i) {
+        _vertex3f actual = Vertices[i];
+        _vertex3f parametrico;
+
+        /*parametrico.x = actual.x + normalesVertices[i].x * t;
+        parametrico.y = actual.y + normalesVertices[i].y * t;
+        parametrico.z = actual.z + normalesVertices[i].z * t;*/
+        parametrico.x = actual.x + normalesCaras[i].x * t;
+        parametrico.y = actual.y + normalesCaras[i].y * t;
+        parametrico.z = actual.z + normalesCaras[i].z * t;
+
+
+        glVertex3fv((GLfloat*) &actual);
+        glVertex3fv((GLfloat*) &parametrico);
+    }
+
+    glEnd();
 }
 

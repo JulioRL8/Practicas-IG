@@ -33,6 +33,9 @@ public:
     void scalation(float x, float y, float z);
     void rotation(float x, float y, float z);
 
+    //Añadir texturas
+    void addTextures(_textura *tex);
+
     //Metodo de dibujado
     void drawMesh(ModelView model);
 

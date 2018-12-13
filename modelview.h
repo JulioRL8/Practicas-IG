@@ -7,7 +7,10 @@ enum ModelView{
     lines,
     chess,
     flat,
-    smooth
+    smooth,
+    texture,
+    texture_smooth,
+    texture_flat
 };
 
 #endif // MODELVIEW_H

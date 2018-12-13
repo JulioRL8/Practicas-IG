@@ -92,3 +92,10 @@ void _mesh::drawMesh(ModelView model){
     glPopMatrix();
 
 }
+
+void _mesh::addTextures(_textura* tex){
+    this->asignarTextura(tex);
+    for(int i=0; i<hijos.size(); i++){
+        hijos[i].addTextures(tex);
+    }
+}

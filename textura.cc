@@ -46,6 +46,23 @@ GLuint _textura::id(void)
    return this->_id;
 }
 
+void _textura::WrapS(GLint valor){
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, valor);
+}
+
+void _textura::WrapT(GLint valor){
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, valor);
+}
+
+void _textura::MinFilter(GLint valor){
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, valor);
+}
+
+void _textura::MagFilter(GLint valor){
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, valor);
+}
+
 
 _textura::~_textura()
 {

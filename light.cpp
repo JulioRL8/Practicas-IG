@@ -2,10 +2,9 @@
 
 #include "vertex.h"
 
-_light::_light(GLenum id, lightType type, _vertex4f position, _vertex4f ambient, _vertex4f difuse, _vertex4f specular)
+_light::_light(GLenum id, _vertex4f position, _vertex4f ambient, _vertex4f difuse, _vertex4f specular)
 {
     this->id= id;
-    this->type=type;
 
     light_ambient= /*(GLfloat*) &ambient;*/pegar(light_ambient, ambient);
     light_specular= pegar(light_ambient, specular);//(GLfloat*) &specular;

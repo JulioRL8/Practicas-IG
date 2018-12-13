@@ -18,6 +18,14 @@ class _textura{
 
    GLuint id(void);
 
+   void WrapS(GLint valor);
+
+   void WrapT(GLint valor);
+
+   void MinFilter(GLint valor);
+
+   void MagFilter(GLint valor);
+
    ~_textura();
 
   public:

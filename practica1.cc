@@ -25,7 +25,6 @@
 #include "grua.h"
 #include "modelview.h"
 #include "light.h"
-#include "texture.h"
 #include "tablero.h"
 
 using namespace _colors_ne;
@@ -43,7 +42,7 @@ const float ANGLE_STEP=1;
 typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
 typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE, OBJECT_PLY, OBJECT_REV, OBJECT_CYLINDER, OBJECT_CONE, OBJECT_SPHERE, OBJECT_EXTRUSION, OBJECT_TAB, OBJECT_GRUA} _object;
 
-typedef enum {MODE_RENDERING_SOLID,MODE_RENDERING_SOLID_CHESS, MODE_RENDERING_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING, MODE_RENDERING_TEXTURE, MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING} _mode_rendering;
+typedef enum {MODE_RENDERING_SOLID,MODE_RENDERING_SOLID_CHESS, MODE_RENDERING_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING, MODE_RENDERING_TEXTURE, MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING, MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING, MODE_NORMALES} _mode_rendering;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_angle_x=0;
@@ -124,7 +123,7 @@ _extrusion extrusion= cuadrado();
 _tablero tab;
 
 //Definicion de luces
-vector<_light> luces= {_light(GL_LIGHT0, Directional, _vertex4f(0,1,0,0)), _light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1), _vertex4f(0.255,0,0.255,1), _vertex4f(0.255,0,0.255,1)) };
+vector<_light> luces= {_light(GL_LIGHT0, _vertex4f(100,10,0,1)), _light(GL_LIGHT1, _vertex4f(-100,5,6,1), _vertex4f(1,1,1,1), _vertex4f(0.255,0,0.255,1), _vertex4f(0.255,0,0.255,1)) };
 
 /*luces.add(_light(GL_LIGHT1, Directional, _vertex4f(0,0,1,0)));
 luces.add(_light(GL_LIGHT1, Directional, _vertex4f(6,5,6,1)));*/
@@ -136,6 +135,9 @@ bool Draw_fill=false;
 bool Draw_chess=false;
 bool Draw_flat= false;
 bool Draw_smooth= false;
+bool Draw_normales= false;
+
+int material=0;
 
 _object Object=OBJECT_TETRAHEDRON;
 _mode_rendering Mode_rendering=MODE_RENDERING_SOLID;
@@ -158,37 +160,6 @@ void set_lights()
     if(luces[1].isOn()){ luces[1].on();}else{ luces[1].off();}
 }
 
-/*void set_lights()
-{
-   if (Light0_active){
-      _vertex4f Position(0,0,1,0);
-
-      glEnable(GL_LIGHT0);
-      /*glMatrixMode(GL_MODELVIEW);
-      glPushMatrix();
-      glLoadIdentity();
-      glLightfv(GL_LIGHT0,GL_POSITION,(GLfloat *)&Position);
-      //glPopMatrix();
-   }else if(Light1_active){
-
-       glEnable(GL_LIGHT1);
-       GLfloat light_ambient[]= {1,1,1,1};
-       GLfloat light_difuse[]= {255,0,255,0.25};
-       GLfloat light_specular[]= {255,0,255,0.25};
-       GLfloat light_position[]= {100,4,4,1};
-
-       glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-       glLightfv(GL_LIGHT1, GL_DIFFUSE, light_difuse);
-       glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-       glLightfv(GL_LIGHT1, GL_POSITION, light_position);
-   }
-   else{
-      glDisable(GL_LIGHT0);
-      glDisable(GL_LIGHT1);
-   }
-   // poner la segunda luz
-}*/
-
 /**
  *
  *@param
@@ -197,23 +168,45 @@ void set_lights()
 
 void set_materials()
 {
-   switch (0){
+   switch (material){
       case 0:{
-	 /*_vertex3f Material_diffuse(0.3,0.3,0.3);
-	 _vertex3f Material_specular(0.1,0.1,0.1);
-	 _vertex3f Material_ambient(0.05,0.05,0.05);
-	 float Material_shininess=1;
+         _vertex3f Material_diffuse(0.3,0.3,0.3);
+         _vertex3f Material_specular(0.1,0.1,0.1);
+         _vertex3f Material_ambient(0.05,0.05,0.05);
+         float Material_shininess=1;
 
-	 glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *)&Material_diffuse);
-	 glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *)&Material_specular);
-	 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat *)&Material_ambient);
-	 glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,Material_shininess);*/
+         glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *)&Material_diffuse);
+         glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *)&Material_specular);
+         glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat *)&Material_ambient);
+         glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,Material_shininess);
       }
-	 break;
-      case 1: // segundo material
-	 break;
-      case 2: // tercer material
-	 break;
+      break;
+
+      case 1:{ // segundo material
+       float mat_ambient[4] ={ 0.2125f, 0.1275f, 0.054f, 1.0f };
+       float mat_diffuse[4] ={ 0.714f, 0.4284f, 0.18144f, 1.0f };
+       float mat_specular[4] ={ 0.393548f, 0.271906f, 0.166721f, 1.0f };
+       float shine = 25.6f;
+
+       glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *)&mat_diffuse);
+       glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *)&mat_specular);
+       glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat *)&mat_ambient);
+       glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shine);
+
+      }
+      break;
+
+      case 2:{ // tercer material
+       float mat_ambient[4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
+       float mat_diffuse[4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
+       float mat_specular[4]={ 0.992157f, 0.941176f, 0.807843f, 1.0f };
+       float shine = 27.8974f;
+
+       glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *)&mat_diffuse);
+       glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *)&mat_specular);
+       glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat *)&mat_ambient);
+       glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shine);
+      }break;
    }
 }
 
@@ -322,22 +315,21 @@ void draw_objects()
       }
    }
 
-
-   /*if (Draw_chess){
-      switch (Object){
-	 case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
-	 case OBJECT_CUBE:Cube.draw_chess();break;
-	 case OBJECT_PLY:ply.draw_chess();break;
-     case OBJECT_REV:revolucionado.draw_chess(); break;
-     case OBJECT_CONE:cone.draw_chess(); break;
-     case OBJECT_CYLINDER:cylinder.draw_chess(); break;
-     case OBJECT_SPHERE:sphere.draw_chess(); break;
-     case OBJECT_EXTRUSION:extrusion.draw_chess(); break;
-     case OBJECT_GRUA:Grua.draw(chess); break;
-
-	 default:break;
-      }
-   }*/
+   if(Draw_normales){
+       switch (Object){
+      case OBJECT_TETRAHEDRON:Tetrahedron.draw_normales();break;
+      case OBJECT_CUBE:Cube.draw_normales();break;
+      case OBJECT_PLY:ply.draw_normales();break;
+      case OBJECT_REV:revolucionado.draw_normales(); break;
+      case OBJECT_CONE:cone.draw_normales(); break;
+      case OBJECT_CYLINDER:cylinder.draw_normales(); break;
+      case OBJECT_SPHERE:sphere.draw_normales(); break;
+      case OBJECT_EXTRUSION:extrusion.draw_normales(); break;
+      case OBJECT_GRUA:Grua.draw(lines); break;
+      case OBJECT_TAB: tab.draw(lines); break;
+      default:break;
+       }
+   }
 
     if (Draw_fill){
 
@@ -365,7 +357,7 @@ void draw_objects()
 
             case MODE_RENDERING_SOLID_CHESS:
                 //set_materials();
-                //(GL_LIGHTING);
+
 
                 switch (Object){
 	             case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
@@ -380,7 +372,7 @@ void draw_objects()
                  case OBJECT_TAB: tab.draw(chess); break;
 	             default:break;
                   }
-                 //glDisable(GL_LIGHTING);
+
 
             break;
         
@@ -430,13 +422,14 @@ void draw_objects()
                case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex(); break;
                case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex(); break;
                case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex(); break;
-               case OBJECT_GRUA: Grua.asignarTextura(textura2); Grua.draw(smooth); break;
+               case OBJECT_GRUA: Grua.addTextures(textura2); Grua.draw(texture); break;
                case OBJECT_TAB: tab.asignarTextura(textura2); tab.draw_tex();break;
                default:break;
                }
             break;
 
             case MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING:
+                set_materials();
                 switch (Object){
                case OBJECT_TETRAHEDRON:Tetrahedron.asignarTextura(textura2); Tetrahedron.draw_tex_flat();break;
                case OBJECT_CUBE: Cube.asignarTextura(textura3, true); Cube.draw_tex_flat();break;
@@ -446,13 +439,15 @@ void draw_objects()
                case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex_flat(); break;
                case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex_flat(); break;
                case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex_flat(); break;
-               case OBJECT_GRUA: Grua.asignarTextura(textura2); Grua.draw(smooth); break;
+               case OBJECT_GRUA: Grua.addTextures(textura2); Grua.draw(texture_flat); break;
                case OBJECT_TAB: tab.asignarTextura(textura2); tab.draw_tex_flat();break;
                default:break;
                }
            break;
 
-            case MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING:
+            case MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING:
+                set_materials();
+
                 switch (Object){
                case OBJECT_TETRAHEDRON:Tetrahedron.asignarTextura(textura2); Tetrahedron.draw_tex_smooth();break;
                case OBJECT_CUBE: Cube.asignarTextura(textura3, true); Cube.draw_tex_smooth();break;
@@ -462,7 +457,7 @@ void draw_objects()
                case OBJECT_CYLINDER:cylinder.asignarTextura(textura2); cylinder.draw_tex_smooth(); break;
                case OBJECT_SPHERE: sphere.asignarTextura(textura2); sphere.draw_tex_smooth(); break;
                case OBJECT_EXTRUSION:extrusion.asignarTextura(textura2); extrusion.draw_tex_smooth(); break;
-               case OBJECT_GRUA: Grua.asignarTextura(textura2); Grua.draw(smooth); break;
+               case OBJECT_GRUA: Grua.addTextures(textura2); Grua.draw(texture_smooth); break;
                case OBJECT_TAB: tab.asignarTextura(textura2); tab.draw_tex_smooth();break;
                default:break;
                }
@@ -538,14 +533,17 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case 'L':Draw_line=!Draw_line;break;
       case 'F':Draw_fill=!Draw_fill;break;
       case 'C':Draw_chess=!Draw_chess;break;
+      case 'N':Draw_normales=!Draw_normales;break;
       /*case 'Z':Draw_flat= !Draw_flat; break;
       case 'X':Draw_smooth= !Draw_smooth; break;*/
 
-      /*case 'J': Light0_active= !Light0_active;//luces[0].Switch();
-      case 'K': Light1_active= !Light1_active;//luces[1].Switch();*/
+      /*case 'J': Light0_active= !Light0_active;break;//luces[0].Switch();
+      case 'K': Light1_active= !Light1_active;break;//luces[1].Switch();*/
       
-      case 'J': luces[0].Switch();
-      case 'K': luces[1].Switch();
+      case 'J': luces[0].Switch();break;
+      case 'K': luces[1].Switch();break;
+
+       case 'M': material = (material + 1)%3;break;
 
       case 'T':Grua.moverGancho(0.05);break;
       case 'G':Grua.moverGancho(-0.05);break;
@@ -587,7 +585,7 @@ void special_keys(int Tecla1,int x,int y)
       case GLUT_KEY_F4: Mode_rendering= MODE_RENDERING_ILLUMINATION_SMOOTH_SHADING; break;
       case GLUT_KEY_F5: Mode_rendering= MODE_RENDERING_TEXTURE; break;
       case GLUT_KEY_F6: Mode_rendering= MODE_RENDERING_TEXTURE_ILLUMINATION_FLAT_SHADING; break;
-      case GLUT_KEY_F6: Mode_rendering= MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING; break;
+      case GLUT_KEY_F7: Mode_rendering= MODE_RENDERING_TEXTURE_ILLUMINATION_SMOOTH_SHADING; break;
 
 
  

@@ -33,7 +33,6 @@ SOURCES += \
     transformation.cpp \
     grua.cpp \
     light.cpp \
-    texture.cpp \
     tablero.cpp \
     textura.cc
 
@@ -58,8 +57,6 @@ HEADERS +=\
     transformation.h \
     grua.h \
     light.h \
-    lighttype.h \
-    texture.h \
     tablero.h \
     textura.h
 
