@@ -61,6 +61,8 @@ _cube Cube;
 _PLY ply("beethoven.ply");
 _grua Grua;
 
+int Ancho=450, Alto=450;
+
 _textura* textura1;
 _textura* textura2;
 _textura* textura3;
@@ -259,6 +261,9 @@ void change_projection()
 void change_observer()
 {
    set_lights();
+
+   glViewport(0,0,Ancho,Alto);
+
    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -496,8 +501,13 @@ void draw_scene(void)
 void resize(int Ancho1,int Alto1)
 {
 // 	change_projection();
-   glViewport(0,0,Ancho1,Alto1);
-   glutPostRedisplay();
+   //glViewport(0,0,Ancho1,Alto1);
+   //glutPostRedisplay();
+
+    change_projection();
+    Ancho=Ancho1;
+    Alto=Alto1;
+    draw_scene();
 }
 
 
@@ -594,6 +604,66 @@ void special_keys(int Tecla1,int x,int y)
 }
 
 
+/**************************************************************************/
+
+void getCamara (GLfloat *x, GLfloat *y)
+{
+*x=Observer_angle_x;
+*y=Observer_angle_y;
+}
+
+/*************************************************************************/
+
+void setCamara (GLfloat x, GLfloat y)
+{
+Observer_angle_x=x;
+Observer_angle_y=y;
+}
+
+
+bool estadoRaton=false;
+int xc, yc;
+
+/*************************************************************************/
+
+void RatonMovido( int x, int y )
+{
+float x0, y0, xn, yn; 
+if(estadoRaton==true) 
+    {
+     getCamara(&x0,&y0);
+     yn=y0+(y-yc);
+     xn=x0+(x-xc);
+     setCamara(xn,yn);
+     xc=x;
+     yc=y;
+     glutPostRedisplay();
+    }
+}
+
+/*************************************************************************/
+
+void clickRaton( int boton, int estado, int x, int y )
+{
+if(boton== GLUT_RIGHT_BUTTON) {
+   if( estado == GLUT_DOWN) {
+      estadoRaton = true;
+      xc=x;
+      yc=y;
+     } 
+   else estadoRaton = false;
+   }
+if(boton== GLUT_LEFT_BUTTON) {
+  if( estado == GLUT_DOWN) {
+      estadoRaton = false;
+      xc=x;
+      yc=y;
+      //pick(xc, yc);
+    } 
+  }
+}
+
+
 
 //***************************************************************************
 // Funcion de incializacion
@@ -656,6 +726,10 @@ int main(int argc, char **argv)
    glutKeyboardFunc(normal_keys);
    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
    glutSpecialFunc(special_keys);
+
+    //FUNCIONES DE RATON
+    glutMouseFunc( clickRaton );
+    glutMotionFunc( RatonMovido );    
 
    // funcion de inicialización
    initialize();
