@@ -11,6 +11,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include <ctype.h>
+#include <fstream>
 
 #include "colors.h"
 #include "axis.h"
@@ -68,7 +69,7 @@ _textura* textura2;
 _textura* textura3;
 
 
-
+bool ortogonal= false;
 
 _extrusion cuadrado(){
     vector<_vertex3f> perfil;
@@ -242,12 +243,18 @@ void clear_window()
 
 void change_projection()
 {
+   const GLfloat ratio = GLfloat(UI_window_height) / GLfloat(UI_window_width);
+
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
 
-   // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
-   //  Front_plane>0  Back_plane>PlanoDelantero)
-   glFrustum(X_MIN,X_MAX,Y_MIN,Y_MAX,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+
+   if(ortogonal){
+       glOrtho(X_MIN-Observer_distance,X_MAX+Observer_distance,Y_MIN-Observer_distance,Y_MAX+Observer_distance,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+   }else{
+       glFrustum(X_MIN,X_MAX,Y_MIN*ratio,Y_MAX*ratio,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+   }
+
 }
 
 
@@ -342,10 +349,10 @@ void draw_objects()
 
             case MODE_RENDERING_SOLID:
                     //set_materials();
-                    glColor3fv((GLfloat *) &BLUE);
+                    //glColor3fv((GLfloat *) &BLUE);
                     //glEnable(GL_LIGHTING);
                       switch (Object){
-	                 case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
+                     case OBJECT_TETRAHEDRON:glLoadName(50); Tetrahedron.draw_fill();break;
 	                 case OBJECT_CUBE:Cube.draw_fill();break;
 	                 case OBJECT_PLY:ply.draw_fill();break;
                      case OBJECT_REV:revolucionado.draw_fill(); break;
@@ -500,9 +507,6 @@ void draw_scene(void)
 
 void resize(int Ancho1,int Alto1)
 {
-// 	change_projection();
-   //glViewport(0,0,Ancho1,Alto1);
-   //glutPostRedisplay();
 
     change_projection();
     Ancho=Ancho1;
@@ -542,13 +546,9 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case 'P':Draw_point=!Draw_point;break;
       case 'L':Draw_line=!Draw_line;break;
       case 'F':Draw_fill=!Draw_fill;break;
-      case 'C':Draw_chess=!Draw_chess;break;
-      case 'N':Draw_normales=!Draw_normales;break;
-      /*case 'Z':Draw_flat= !Draw_flat; break;
-      case 'X':Draw_smooth= !Draw_smooth; break;*/
 
-      /*case 'J': Light0_active= !Light0_active;break;//luces[0].Switch();
-      case 'K': Light1_active= !Light1_active;break;//luces[1].Switch();*/
+      case 'N':Draw_normales=!Draw_normales;break;
+
       
       case 'J': luces[0].Switch();break;
       case 'K': luces[1].Switch();break;
@@ -560,6 +560,8 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       case 'Y':Grua.girarEje1(5);break;
       case 'H':Grua.girarEje1(-5);break;
       case 'U':Grua.girarEje2(5);break;
+      case 'C': ortogonal= false; change_projection(); break;
+      case 'V': ortogonal= true; change_projection(); break;
       //case 'J':Grua.girarEje2(-5);break;
       case 'I':Grua.girarRotatorio(5);break;
       //case 'K':Grua.girarRotatorio(-5);break;
@@ -600,69 +602,182 @@ void special_keys(int Tecla1,int x,int y)
 
  
    }
+   change_projection();
    glutPostRedisplay();
 }
 
 
-/**************************************************************************/
 
-void getCamara (GLfloat *x, GLfloat *y)
-{
-*x=Observer_angle_x;
-*y=Observer_angle_y;
-}
 
 /*************************************************************************/
-
-void setCamara (GLfloat x, GLfloat y)
-{
-Observer_angle_x=x;
-Observer_angle_y=y;
-}
-
 
 bool estadoRaton=false;
 int xc, yc;
 
-/*************************************************************************/
-
 void RatonMovido( int x, int y )
 {
-float x0, y0, xn, yn; 
-if(estadoRaton==true) 
-    {
-     getCamara(&x0,&y0);
-     yn=y0+(y-yc);
-     xn=x0+(x-xc);
-     setCamara(xn,yn);
-     xc=x;
-     yc=y;
-     glutPostRedisplay();
-    }
+    if(estadoRaton==true)
+        {
+         Observer_angle_y += x-xc;
+         Observer_angle_x += y-yc;
+         xc=x;
+         yc=y;
+         glutPostRedisplay();
+        }
 }
+
+/**************************************************************/
+void procesar_hits(GLint hits, GLuint *names)
+ {
+    int i;
+
+
+
+
+    printf("%d hits:\n", hits);
+
+    for (i = 0; i < hits; i++){
+        printf(	"Número: %d\n"
+                "Min Z: %f\n"
+                "Max Z: %f\n"
+                "Nombre en la pila: %d\n",
+                (GLubyte)names[i * 4],
+                (float)names[i * 4 + 1]/(pow(2,32)-1),
+                (float)names[i * 4 + 2]/(pow(2,32)-1),
+                (GLubyte)names[i * 4 + 3]);
+        printf("\n");
+
+        switch (Object){
+           case OBJECT_TETRAHEDRON:Tetrahedron.seleccionado(names[i*4+3]);break;
+           case OBJECT_CUBE: Cube.seleccionado(names[i*4+3]); break;
+           case OBJECT_PLY:ply.seleccionado(names[i*4+3]);break;
+           case OBJECT_REV:revolucionado.seleccionado(names[i*4+3]); break;
+           case OBJECT_CONE: cone.seleccionado(names[i*4+3]); break;
+           case OBJECT_CYLINDER:cylinder.seleccionado(names[i*4+3]); break;
+           case OBJECT_SPHERE: sphere.seleccionado(names[i*4+3]); break;
+           case OBJECT_EXTRUSION:extrusion.seleccionado(names[i*4+3]); break;
+           case OBJECT_GRUA: Grua.seleccionado(names[i*4+3]); break;
+           case OBJECT_TAB: tab.seleccionado(names[i*4+3]);break;
+       default:break;
+        }
+     }
+
+ }
+
+
+void captura(const char* fname)
+{
+   // Graba un fichero PPM
+   size_t size = UI_window_width * UI_window_height * 3;
+   unsigned char *img = new unsigned char[size];
+   glReadPixels(0,0,UI_window_width, UI_window_height,GL_RGB,GL_UNSIGNED_BYTE,img);
+   ofstream myfile (fname, ios::out | ios::binary);
+   myfile << "P6" << "\n# GL Screenshot\n" << UI_window_width << " " << UI_window_height << " " << "255" << "\n";
+   myfile.write ((const char*) img, size);
+   myfile.close();
+}
+
+/**
+ *
+ *@param
+ *@returns
+ */
+void pick(GLint Selection_position_x, GLint Selection_position_y)
+{
+   glDrawBuffer(GL_BACK);
+
+   /*************************/
+   // dibujar con colores de seleccion
+   glClearColor(0, 0, 0, 1);
+   clear_window();
+   change_projection();
+   change_observer();
+   //draw_objects(); // Cambiar para que dibuje con los identificadores
+
+   switch (Object){
+      case OBJECT_TETRAHEDRON:Tetrahedron.draw_selection();break;
+      case OBJECT_CUBE: Cube.draw_selection(); break;
+      case OBJECT_PLY:ply.draw_selection();break;
+      case OBJECT_REV:revolucionado.draw_selection(); break;
+      case OBJECT_CONE: cone.draw_selection(); break;
+      case OBJECT_CYLINDER:cylinder.draw_selection(); break;
+      case OBJECT_SPHERE: sphere.draw_selection(); break;
+      case OBJECT_EXTRUSION:extrusion.draw_selection(); break;
+      case OBJECT_GRUA: Grua.draw_selection(); break;
+      case OBJECT_TAB: tab.draw_selection();break;
+  default:break;}
+   /*************************/
+
+   std::vector<float> Color(3);
+   glPixelStorei(GL_PACK_ALIGNMENT,1);
+   glReadBuffer(GL_BACK); // seleccionamos el buffer trasero
+
+   /*************************/
+   // captura el pixel
+   glReadPixels(Selection_position_x,UI_window_height-Selection_position_y,1,1,GL_RGB,GL_FLOAT, &Color[0]);
+
+
+   // Depura lo que dibujamos y lo que capturamos:
+   captura("screenshot.ppm");
+   std::cout << "Color (RGB): "
+         <<  Color[0] << ", "
+         <<  Color[1] << ", "
+         <<  Color[2] << std::endl;
+
+   // convertir de RGB a identificador
+   // actualizar el identificador en el objeto
+   /*************************/
+   switch (Object){
+      case OBJECT_TETRAHEDRON:Tetrahedron.seleccionado(Color[0]);break;
+      case OBJECT_CUBE: Cube.seleccionado(Color[0]); break;
+      case OBJECT_PLY:ply.seleccionado(Color[0]);break;
+      case OBJECT_REV:revolucionado.seleccionado(Color[0]); break;
+      case OBJECT_CONE: cone.seleccionado(Color[0]); break;
+      case OBJECT_CYLINDER:cylinder.seleccionado(Color[0]); break;
+      case OBJECT_SPHERE: sphere.seleccionado(Color[0]); break;
+      case OBJECT_EXTRUSION:extrusion.seleccionado(Color[0]); break;
+      case OBJECT_GRUA: Grua.seleccionado(Color[0]); break;
+      case OBJECT_TAB: tab.seleccionado(Color[0]);break;
+  default:break;
+   }
+   /* Dibuja normal la segunda pasada */
+   glClearColor(1, 1, 1, 1);
+   draw_scene();
+}
+
+
 
 /*************************************************************************/
 
 void clickRaton( int boton, int estado, int x, int y )
 {
 if(boton== GLUT_RIGHT_BUTTON) {
-   if( estado == GLUT_DOWN) {
-      estadoRaton = true;
-      xc=x;
-      yc=y;
-     } 
-   else estadoRaton = false;
-   }
-if(boton== GLUT_LEFT_BUTTON) {
-  if( estado == GLUT_DOWN) {
-      estadoRaton = false;
-      xc=x;
-      yc=y;
-      //pick(xc, yc);
-    } 
+if( estado == GLUT_DOWN) {
+   estadoRaton = true;
+   xc=x;
+   yc=y;
   }
+else estadoRaton = false;
 }
-
+if(boton== GLUT_LEFT_BUTTON) {
+if( estado == GLUT_DOWN) {
+   //estadoRaton = false;
+   xc=x;
+   yc=y;
+   pick(xc, yc);
+ }
+}
+if(boton==3){
+ Observer_distance-= 0.25;
+ /*camara.alejar();*/
+ glutPostRedisplay();
+}else if(boton== 4){
+ /*camara.acercar();*/
+ Observer_distance+= 0.25;
+ glutPostRedisplay();
+}
+change_projection();
+}
 
 
 //***************************************************************************
@@ -716,7 +831,7 @@ int main(int argc, char **argv)
 
    // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
    // al bucle de eventos)
-   glutCreateWindow("Practica 3");
+   glutCreateWindow("Practica 5");
 
    // asignación de la funcion llamada "dibujar" al evento de dibujo
    glutDisplayFunc(draw_scene);

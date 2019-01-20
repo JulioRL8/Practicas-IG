@@ -22,8 +22,15 @@ public:
    vector<_vertex3f>  normalesCaras;
    vector<vector<_vertex2f> > texturas;
    _textura *textura;
+   vector<int> seleccionados;
+   vector<float> colores;
+
+   void seleccionado(float color);
+   bool estaSeleccionado(int i);
+   void crearColores();
 
    void draw(ModelView model);
+   void draw_selection();
    void draw_line();
    void draw_fill();
    void draw_chess();

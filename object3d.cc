@@ -29,20 +29,67 @@ void _object3D::draw_line()
 }
 
 
+void _object3D::crearColores(){
+    this->colores.resize(Triangles.size());
+    float f= 1.0f/(Triangles.size()+1);
+
+
+    for(int i=0; i<Triangles.size(); i++){
+        colores[i]= (i+1)*f;
+    }
+    cout << "calla";
+}
+
+void _object3D::draw_selection()
+{
+   glPolygonMode(GL_FRONT,GL_FILL);
+
+   if(colores.empty()){ this->crearColores();}
+
+
+   glBegin(GL_TRIANGLES);
+   for (unsigned int i=0;i<Triangles.size();i++){
+
+      glColor3f(colores[i],0,1.0);
+
+
+      glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+      glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+      glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+
+   }
+   glEnd();
+}
+
 /**
  *
  *@param
  *@returns
  */
 
+bool _object3D::estaSeleccionado(int i){
+    bool esta=false;
+    for(int j=0; j<this->seleccionados.size(); j++){
+        if(seleccionados[j]==i){
+            esta=true;
+        }
+    }
+
+    return esta;
+}
+
 void _object3D::draw_fill()
 {
    glPolygonMode(GL_FRONT,GL_FILL);
+
    glBegin(GL_TRIANGLES);
    for (unsigned int i=0;i<Triangles.size();i++){
+      if( estaSeleccionado(i)){ glColor3f(0,1.0,0.0);}
+      else glColor3f(0.0,0.0,1.0);
       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+
    }
    glEnd();
 }
@@ -333,5 +380,37 @@ void _object3D::draw_normales()
     }
 
     glEnd();
+}
+
+void _object3D::seleccionado(float color){
+
+
+    /*int triangle= rint(color / (1.0f/(Triangles.size()+1)) - 1);
+
+    bool esta= false;
+    int pos=0;
+    for( int i=0; i<this->seleccionados.size(); i++){
+        if(seleccionados[i]==triangle){ pos=i; esta=true;}
+    }*/
+    int num=0; float diferencia=20;
+    for(int i=0; i<colores.size(); i++){
+        if( abs(colores[i]-color) < diferencia ){
+            diferencia= abs(colores[i]-color);
+            num=i;
+        }
+
+    }
+
+    bool esta= false;
+    int pos=0;
+    for( int j=0; j<this->seleccionados.size(); j++){
+        if(seleccionados[j]==num){ pos=j; esta=true;}
+    }
+
+    if(esta){
+        seleccionados.erase(seleccionados.begin()+pos);
+    }else{
+        seleccionados.push_back(num);
+    }
 }
 
