@@ -31,13 +31,39 @@ void _object3D::draw_line()
 
 void _object3D::crearColores(){
     this->colores.resize(Triangles.size());
-    float f= 1.0f/(Triangles.size()+1);
+    //float f= 1.0f/(Triangles.size()+1);
+
+    /*int num=255;*/
+
+    
 
 
     for(int i=0; i<Triangles.size(); i++){
-        colores[i]= (i+1)*f;
+        //colores[i]= (i+1)*f;
+        /*int cuantos= i/num;
+        int mod= i%num;
+
+        if(cuantos>0){
+            if(cuantos==1){
+                colores[i]= _vertex3i(255,mod,0);
+            }else if(cuantos>{
+                colores[i]= _vertex3i(255,255,mod);
+            }
+        }*/
+
+        float red= ((i+1) & 0x00FF0000) >>16;
+        red /= 255.0;
+
+        float green=((i+1) & 0x0000FF00) >> 8;
+        green /= 255.0;
+
+        float blue=((i+1) & 0x000000FF);
+        blue /= 255.0;
+
+
+        colores[i]= _vertex3f(red,green,blue);
+        cout << red << " " <<  green << " " << blue << endl;
     }
-    cout << "calla";
 }
 
 void _object3D::draw_selection()
@@ -50,7 +76,7 @@ void _object3D::draw_selection()
    glBegin(GL_TRIANGLES);
    for (unsigned int i=0;i<Triangles.size();i++){
 
-      glColor3f(colores[i],0,1.0);
+      glColor3f(colores[i].x,colores[i].y,colores[i].z);
 
 
       glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
@@ -382,35 +408,34 @@ void _object3D::draw_normales()
     glEnd();
 }
 
-void _object3D::seleccionado(float color){
+void _object3D::seleccionado(float *color){
 
-
-    /*int triangle= rint(color / (1.0f/(Triangles.size()+1)) - 1);
-
-    bool esta= false;
-    int pos=0;
-    for( int i=0; i<this->seleccionados.size(); i++){
-        if(seleccionados[i]==triangle){ pos=i; esta=true;}
-    }*/
-    int num=0; float diferencia=20;
-    for(int i=0; i<colores.size(); i++){
-        if( abs(colores[i]-color) < diferencia ){
-            diferencia= abs(colores[i]-color);
-            num=i;
+        int num=0; bool encontrado=false; float diferencia=20;
+        for(int i=0; i<colores.size(); i++){
+            if( (abs(colores[i].x-color[0]) + abs(colores[i].y-color[1])  + abs(colores[i].z-color[2])) < diferencia  ){
+                num=i;
+                diferencia= (abs(colores[i].x-color[0]) + abs(colores[i].y-color[1])  + abs(colores[i].z-color[2]));
+            }
+            //cout << colores[i].x << " " <<  color[0] << endl << colores[i].y << " " << color[1]  << endl << colores[i].z <<" " <<  color[2] << endl;
         }
 
-    }
+        bool esta= false;
+        int pos=0;
+        
+        if(diferencia < 0.000001){
+            for( int j=0; j<this->seleccionados.size(); j++){
+                if(seleccionados[j]==num){ pos=j; esta=true;}
+            }
 
-    bool esta= false;
-    int pos=0;
-    for( int j=0; j<this->seleccionados.size(); j++){
-        if(seleccionados[j]==num){ pos=j; esta=true;}
-    }
+            if(esta){
+                seleccionados.erase(seleccionados.begin()+pos);
+            }else{
+                seleccionados.push_back(num);
+            }
+        }
 
-    if(esta){
-        seleccionados.erase(seleccionados.begin()+pos);
-    }else{
-        seleccionados.push_back(num);
-    }
+
+    
+
 }
 

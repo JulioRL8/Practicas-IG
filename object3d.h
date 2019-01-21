@@ -23,9 +23,9 @@ public:
    vector<vector<_vertex2f> > texturas;
    _textura *textura;
    vector<int> seleccionados;
-   vector<float> colores;
+   vector<_vertex3f> colores;
 
-   void seleccionado(float color);
+   void seleccionado(float *color);
    bool estaSeleccionado(int i);
    void crearColores();
 

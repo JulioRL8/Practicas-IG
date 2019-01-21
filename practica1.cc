@@ -647,7 +647,7 @@ void procesar_hits(GLint hits, GLuint *names)
                 (GLubyte)names[i * 4 + 3]);
         printf("\n");
 
-        switch (Object){
+        /*switch (Object){
            case OBJECT_TETRAHEDRON:Tetrahedron.seleccionado(names[i*4+3]);break;
            case OBJECT_CUBE: Cube.seleccionado(names[i*4+3]); break;
            case OBJECT_PLY:ply.seleccionado(names[i*4+3]);break;
@@ -659,7 +659,7 @@ void procesar_hits(GLint hits, GLuint *names)
            case OBJECT_GRUA: Grua.seleccionado(names[i*4+3]); break;
            case OBJECT_TAB: tab.seleccionado(names[i*4+3]);break;
        default:break;
-        }
+        }*/
      }
 
  }
@@ -728,16 +728,16 @@ void pick(GLint Selection_position_x, GLint Selection_position_y)
    // actualizar el identificador en el objeto
    /*************************/
    switch (Object){
-      case OBJECT_TETRAHEDRON:Tetrahedron.seleccionado(Color[0]);break;
-      case OBJECT_CUBE: Cube.seleccionado(Color[0]); break;
-      case OBJECT_PLY:ply.seleccionado(Color[0]);break;
-      case OBJECT_REV:revolucionado.seleccionado(Color[0]); break;
-      case OBJECT_CONE: cone.seleccionado(Color[0]); break;
-      case OBJECT_CYLINDER:cylinder.seleccionado(Color[0]); break;
-      case OBJECT_SPHERE: sphere.seleccionado(Color[0]); break;
-      case OBJECT_EXTRUSION:extrusion.seleccionado(Color[0]); break;
-      case OBJECT_GRUA: Grua.seleccionado(Color[0]); break;
-      case OBJECT_TAB: tab.seleccionado(Color[0]);break;
+      case OBJECT_TETRAHEDRON:Tetrahedron.seleccionado(&Color[0]);break;
+      case OBJECT_CUBE: Cube.seleccionado(&Color[0]); break;
+      case OBJECT_PLY:ply.seleccionado(&Color[0]);break;
+      case OBJECT_REV:revolucionado.seleccionado(&Color[0]); break;
+      case OBJECT_CONE: cone.seleccionado(&Color[0]); break;
+      case OBJECT_CYLINDER:cylinder.seleccionado(&Color[0]); break;
+      case OBJECT_SPHERE: sphere.seleccionado(&Color[0]); break;
+      case OBJECT_EXTRUSION:extrusion.seleccionado(&Color[0]); break;
+      case OBJECT_GRUA: Grua.seleccionado(&Color[0]); break;
+      case OBJECT_TAB: tab.seleccionado(&Color[0]);break;
   default:break;
    }
    /* Dibuja normal la segunda pasada */
