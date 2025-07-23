@@ -13,4 +13,5 @@ void _basic_object3D::draw_point()
       glVertex3fv((GLfloat *) &Vertices[i]);
    }
    glEnd();
+    
 }
